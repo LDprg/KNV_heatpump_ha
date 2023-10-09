@@ -2,7 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "Fill in your KNV Home login information",
+        "title": "Füller deine KNV Home Daten ein",
         "data": {
           "ip_address": "IP Adresse",
           "username": "Nutzernamen",
