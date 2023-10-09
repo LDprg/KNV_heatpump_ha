@@ -2,4 +2,8 @@
 import logging
 
 LOGGER = logging.getLogger(__package__)
+
 DOMAIN = "knv_heatpump"
+
+
+ERR_INVALID_IP = "invalid_ip"

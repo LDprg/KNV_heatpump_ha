@@ -9,6 +9,10 @@
           "password": "Passwort"
         }
       }
+    },
+    "error": {
+      "already_configured_device": "Gerät bereits konfiguriert",
+      "invalid_ip": "Keine gültige IP angegeben"
     }
   }
 }

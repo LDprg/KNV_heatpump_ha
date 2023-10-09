@@ -9,6 +9,10 @@
           "password": "Password"
         }
       }
+    },
+    "error": {
+      "already_configured_device": "Device is already configured",
+      "invalid_ip": "IP doesn't match valid format"
     }
   }
 }
