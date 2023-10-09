@@ -10,6 +10,9 @@ configuration.yaml file.
 
 knv_heatpump:
 """
+
+# pylint: disable=no-member
+
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
