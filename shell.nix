@@ -23,7 +23,17 @@ pkgs.mkShell {
         with ps; [
           pip
           voluptuous
-          ipy
+          (buildPythonPackage rec {
+            pname = "knvheatpumplib";
+            version = "0.0.3";
+            pyproject = true;
+            doCheck = false;
+
+            src = fetchPypi {
+              inherit pname version;
+              sha256 = "sha256-uvH9tBxtpM0urnIuE1UA2pEzMqs/L1x9M6+bSSrLUjU=";
+            };
+          })
           (buildPythonPackage rec {
             pname = "homeassistant";
             version = "2023.10.1";

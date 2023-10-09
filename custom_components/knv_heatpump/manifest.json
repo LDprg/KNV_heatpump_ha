@@ -3,7 +3,7 @@
     "name": "KNV Heatpump",
     "codeowners": [ "@LDprg" ],
     "config_flow": true,
-    "requirements": ["IPy"],
+    "requirements": ["knvheatpumplib"],
     "documentation": "https://github.com/LDprg/KNV_heatpump_ha",
     "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
     "iot_class": "local_polling",

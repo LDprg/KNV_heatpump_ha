@@ -5,13 +5,13 @@
 
 from __future__ import annotations
 
+import ipaddress
+
 import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_ERROR, CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
 from homeassistant.data_entry_flow import AbortFlow
-
-from IPy import IP
 
 from . import const as knv
 
@@ -28,9 +28,9 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
 
         errors = {}
 
-        if info is None:
+        if info is not None:
             try:
-                IP(info[CONF_IP_ADDRESS])
+                ipaddress.ip_address(info[CONF_IP_ADDRESS])
             except ValueError:
                 errors[CONF_ERROR] = knv.ERR_INVALID_IP
 
