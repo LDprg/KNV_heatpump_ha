@@ -7,7 +7,5 @@
     "documentation": "https://github.com/LDprg/KNV_heatpump_ha",
     "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
     "iot_class": "local_polling",
-    "integration_type": "hub",
-    "requirements": [],
-    "version": "0.0.1"
+    "loggers": ["custom_components.knv_heatpump"]
   }
