@@ -4,9 +4,9 @@
       "user": {
         "title": "Fill in your KNV Home login information",
         "data": {
-          "ip_address": "IP Address",
-          "username": "Username",
-          "password": "Password"
+          "ip_address": "IP Adresse",
+          "username": "Nutzernamen",
+          "password": "Passwort"
         }
       }
     }
