@@ -28,15 +28,15 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             data_schema=vol.Schema({
                 vol.Required(
                     knv.CONF_IP,
-                    description={DESCR: device_config.get(knv.CONF_IP)}
+                    description=knv.CONF_IP
                 ): str,
                 vol.Required(
                     knv.CONF_USER,
-                    description={DESCR: device_config.get(knv.CONF_USER)}
+                    description=knv.CONF_USER
                 ): str,
                 vol.Required(
                     knv.CONF_PASSWORD,
-                    description={DESCR: device_config.get(knv.CONF_PASSWORD)}
+                    description=knv.CONF_PASSWORD
                 ): str
             }),
             errors=errors
