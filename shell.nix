@@ -23,7 +23,7 @@ pkgs.mkShell {
         with ps; [
           pip
           voluptuous
-          IPy
+          ipy
           (buildPythonPackage rec {
             pname = "homeassistant";
             version = "2023.10.1";
