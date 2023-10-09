@@ -18,14 +18,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 
 # The domain of your component. Should be equal to the name of your component.
-DOMAIN = "hello_world_async"
-
+DOMAIN = "knv_heatpump"
 
 @asyncio.coroutine
 def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Setup our skeleton component."""
     # States are in the format DOMAIN.OBJECT_ID.
-    hass.states.async_set('hello_world_async.Hello_World', 'Works!')
+    hass.states.async_set('knv_heatpump.Hello_World', 'Works!')
 
     # Return boolean to indicate that initialization was successfully.
     return True
