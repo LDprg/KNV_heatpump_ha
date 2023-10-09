@@ -3,13 +3,14 @@
 # pylint: disable=no-member
 # pylint: disable=arguments-renamed
 
+from __future__ import annotations
+
 import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
-from . import const as knv
 
-DESCR = "suggested_value"
+from . import const as knv
 
 
 class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
@@ -25,7 +26,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
         errors = {}
 
         if info is not None:
-            pass
+            knv.LOGGER.info(info)
 
         return self.async_show_form(
             step_id="user",
