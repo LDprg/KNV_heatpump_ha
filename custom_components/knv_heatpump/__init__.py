@@ -15,12 +15,12 @@ from __future__ import annotations
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
 
-DOMAIN = "knv_heatpump"
+from . import const as knv
 
 
 async def async_setup(hass: HomeAssistant, _config: ConfigType):
     """Setup our skeleton component."""
 
-    hass.states.async_set('knv_heatpump.Hello_World', 'Works!')
+    hass.states.async_set(knv.DOMAIN + '.Hello_World', 'Works!')
 
     return True

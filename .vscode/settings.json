@@ -3,10 +3,11 @@
         "editor.defaultFormatter": "ms-python.autopep8",
         "editor.formatOnSave": true
     },
-    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.typeCheckingMode": "basic",
     "cSpell.words": [
         "hass",
         "heatpump",
+        "heatpumps",
         "homeassistant"
     ]
 }
