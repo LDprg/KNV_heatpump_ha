@@ -8,6 +8,8 @@ import voluptuous as vol
 from homeassistant import config_entries
 from . import const as knv
 
+DESCR = "suggested_value"
+
 
 class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
     """
@@ -28,15 +30,15 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             data_schema=vol.Schema({
                 vol.Required(
                     knv.CONF_IP,
-                    description=knv.CONF_IP
+                    description={DESCR: knv.CONF_IP}
                 ): str,
                 vol.Required(
                     knv.CONF_USER,
-                    description=knv.CONF_USER
+                    description={DESCR: knv.CONF_USER}
                 ): str,
                 vol.Required(
                     knv.CONF_PASSWORD,
-                    description=knv.CONF_PASSWORD
+                    description={DESCR: knv.CONF_PASSWORD}
                 ): str
             }),
             errors=errors
