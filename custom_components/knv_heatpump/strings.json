@@ -4,8 +4,9 @@
     "step": {
       "init": {
         "title": "KNV heatpump bridge",
+        "description": "",
         "data": {
-          "host": "Host"
+          "ip": "IP"
         }
       }
     },

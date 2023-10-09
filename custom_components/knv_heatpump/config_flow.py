@@ -21,5 +21,5 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             pass
 
         return self.async_show_form(
-            step_id="init", data_schema=vol.Schema({vol.Required("host"): str})
+            step_id="init", data_schema=vol.Schema({vol.Required(knv.CONF_IP): str})
         )
