@@ -2,6 +2,7 @@
     "domain": "knv_heatpump",
     "name": "KNV Heatpump",
     "codeowners": [ "@LDprg" ],
+    "config_flow": true,
     "dependencies": [],
     "documentation": "https://github.com/LDprg/KNV_heatpump_ha",
     "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
