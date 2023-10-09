@@ -8,11 +8,9 @@ Configuration:
 To use the hello_world component you will need to add the following to your
 configuration.yaml file.
 
-hello_world_async:
+knv_heatpump:
 """
 from __future__ import annotations
-
-import asyncio
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.typing import ConfigType
@@ -20,7 +18,6 @@ from homeassistant.helpers.typing import ConfigType
 # The domain of your component. Should be equal to the name of your component.
 DOMAIN = "knv_heatpump"
 
-@asyncio.coroutine
 def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Setup our skeleton component."""
     # States are in the format DOMAIN.OBJECT_ID.
