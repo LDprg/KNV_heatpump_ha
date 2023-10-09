@@ -3,7 +3,51 @@
 pkgs.mkShell {
   nativeBuildInputs = with pkgs;
     [
-      (python3.withPackages
-        (ps: with ps; [ homeassistant ]))
+      (let
+        python = let
+          packageOverrides = self: super: {
+            wheel = super.wheel.overridePythonAttrs (old: rec {
+              pname = "wheel";
+              version = "0.40.0";
+              src = fetchPypi {
+                inherit pname version;
+                hash = "sha256-zRGW8/ruKzGWjWJuFzHJT5nL22fPWkbk9WVsvudziHM=";
+              };
+            });
+          };
+        in pkgs.python3.override {
+          inherit packageOverrides;
+          self = python;
+        };
+      in python.withPackages (ps:
+        with ps; [
+          pip
+          (buildPythonPackage rec {
+            pname = "homeassistant";
+            version = "2023.10.1";
+            pyproject = true;
+            doCheck = false;
+
+            src = fetchPypi {
+              inherit pname version;
+              sha256 = "sha256-3VkV5DirOzLO9Qbo4s5of5Aie7JvSAN7hgHBTA8koAE=";
+            };
+
+            nativeBuildInputs = [
+              (buildPythonPackage rec {
+                pname = "setuptools";
+                version = "68.0.0";
+                pyproject = true;
+                doCheck = false;
+
+                src = fetchPypi {
+                  inherit pname version;
+                  sha256 =
+                    "sha256-uvH9tBxtpM0urnIuE1UA2pEzMqs/L1x9M6+bSSrLUjU=";
+                };
+              })
+            ];
+          })
+        ]))
     ];
 }

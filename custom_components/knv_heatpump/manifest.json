@@ -1,0 +1,11 @@
+{
+    "domain": "knv_heatpump",
+    "name": "KNV Heatpump",
+    "codeowners": [ "@LDprg" ],
+    "dependencies": [],
+    "documentation": "https://github.com/LDprg/KNV_heatpump_ha",
+    "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
+    "iot_class": "local_polling",
+    "requirements": [],
+    "version": "0.0.1"
+  }
