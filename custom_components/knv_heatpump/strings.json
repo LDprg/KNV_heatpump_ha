@@ -6,19 +6,19 @@
         "title": "KNV heatpump bridge",
         "description": "Add Information about the heatpump.",
         "data": {
-          "ip": "Ip Address"
+          "ip": "Ip Address",
+          "user": "Username",
+          "password": "Password"
         }
       }
     },
     "error": {
-      "register_failed": "Failed to register, please try again",
-      "linking": "Unknown linking error occurred."
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
     },
     "abort": {
-      "all_configured": "All KNV heatpumps are already configured",
-      "unknown": "Unknown error occurred",
-      "cannot_connect": "Unable to connect to the KNV heatpump",
-      "already_configured": "KNV heatpump is already configured"
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
     }
   }
 }

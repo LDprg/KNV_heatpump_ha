@@ -17,9 +17,18 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
         """
         Init step
         """
+
+        errors = {}
+
         if info is not None:
             pass
 
         return self.async_show_form(
-            step_id="user", data_schema=vol.Schema({vol.Required(knv.CONF_IP): str})
+            step_id="user",
+            data_schema=vol.Schema({
+                vol.Required(knv.CONF_IP): str,
+                vol.Required(knv.CONF_USER): str,
+                vol.Required(knv.CONF_PASSWORD): str
+            }),
+            errors=errors
         )
