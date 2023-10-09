@@ -1,10 +1,9 @@
 {
-  "title": "KNV heatpump Bridge",
+  "title": "KNV heatpump",
   "config": {
     "step": {
       "user": {
-        "title": "KNV heatpump bridge",
-        "description": "Add Information about the heatpump.",
+        "title": "Add data for KNV Home dashboard.",
         "data": {
           "ip_address": "[%key:common::config_flow::data::ip%]",
           "username": "[%key:common::config_flow::data::username%]",
