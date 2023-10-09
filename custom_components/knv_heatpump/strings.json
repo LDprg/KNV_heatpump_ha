@@ -2,7 +2,7 @@
   "title": "KNV heatpump Bridge",
   "config": {
     "step": {
-      "init": {
+      "user": {
         "title": "KNV heatpump bridge",
         "description": "Add Information about the heatpump.",
         "data": {

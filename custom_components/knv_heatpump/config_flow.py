@@ -13,7 +13,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
     """
     KNV heatpump config flow
     """
-    async def async_step_init(self, info):
+    async def async_step_user(self, info):
         """
         Init step
         """
@@ -21,5 +21,5 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             pass
 
         return self.async_show_form(
-            step_id="init", data_schema=vol.Schema({vol.Required(knv.CONF_IP): str})
+            step_id="user", data_schema=vol.Schema({vol.Required(knv.CONF_IP): str})
         )
