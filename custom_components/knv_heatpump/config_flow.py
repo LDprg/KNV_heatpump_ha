@@ -26,7 +26,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
         errors = {}
 
         if info is not None:
-            knv.LOGGER.info(info)
+            pass
 
         return self.async_show_form(
             step_id="user",
