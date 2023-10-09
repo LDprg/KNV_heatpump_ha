@@ -15,6 +15,11 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
     """
     KNV heatpump config flow
     """
+
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        """Initialize options flow."""
+        self.config_entry = config_entry
+
     async def async_step_user(self, info):
         """
         Init step
@@ -30,15 +35,21 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             data_schema=vol.Schema({
                 vol.Required(
                     knv.CONF_IP,
-                    description={DESCR: knv.CONF_IP}
+                    description={
+                        DESCR: self.config_entry.options.get(knv.CONF_IP)
+                    }
                 ): str,
                 vol.Required(
                     knv.CONF_USER,
-                    description={DESCR: knv.CONF_USER}
+                    description={
+                        DESCR: self.config_entry.options.get(knv.CONF_USER)
+                    }
                 ): str,
                 vol.Required(
                     knv.CONF_PASSWORD,
-                    description={DESCR: knv.CONF_PASSWORD}
+                    description={
+                        DESCR: self.config_entry.options.get(knv.CONF_PASSWORD)
+                    }
                 ): str
             }),
             errors=errors
