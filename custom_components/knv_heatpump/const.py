@@ -2,6 +2,6 @@
 
 DOMAIN = "knv_heatpump"
 
-CONF_IP = "ip"
-CONF_USER = "user"
+CONF_IP_ADDRESS = "ip_address"
+CONF_USER = "username"
 CONF_PASSWORD = "password"

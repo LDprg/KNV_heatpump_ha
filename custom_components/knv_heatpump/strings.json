@@ -6,8 +6,8 @@
         "title": "KNV heatpump bridge",
         "description": "Add Information about the heatpump.",
         "data": {
-          "ip": "[%key:common::config_flow::data::ip%]",
-          "user": "[%key:common::config_flow::data::user%]",
+          "ip_address": "[%key:common::config_flow::data::ip_address%]",
+          "username": "[%key:common::config_flow::data::user%]",
           "password": "[%key:common::config_flow::data::password%]"
         }
       }
