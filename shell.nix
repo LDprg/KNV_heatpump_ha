@@ -23,6 +23,17 @@ pkgs.mkShell {
         with ps; [
           pip
           voluptuous
+          setuptools-scm
+          (buildPythonPackage rec {
+            pname = "getmac";
+            version = "0.9.4";
+            doCheck = false;
+
+            src = fetchPypi {
+              inherit pname version;
+              sha256 = "sha256-hHd1W2n/k6O1FLVOH7uOu1fY9OXDfnwYvO86Dx8UkjI=";
+            };
+          })
           (buildPythonPackage rec {
             pname = "knvheatpumplib";
             version = "0.0.7";
