@@ -14,7 +14,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-SCAN_INTERVAL = timedelta(minutes=10)
+SCAN_INTERVAL = timedelta(seconds=5)
 
 
 async def async_setup_entry(
@@ -47,6 +47,11 @@ class ExampleSensor(SensorEntity):
     def name(self) -> str:
         """Return the name of the sensor."""
         return 'Example Temperature'
+
+    @property
+    def unique_id(self) -> str:
+        """Return the unique ID of the sensor."""
+        return "test_sensor"
 
     @property
     def state(self) -> int | None:
