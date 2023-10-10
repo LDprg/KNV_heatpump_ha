@@ -23,6 +23,7 @@ pkgs.mkShell {
         with ps; [
           pip
           voluptuous
+          async-timeout
           setuptools-scm
           (buildPythonPackage rec {
             pname = "scapy";
