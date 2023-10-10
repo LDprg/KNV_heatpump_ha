@@ -58,7 +58,7 @@ class ExampleSensor(SensorEntity):
         """Return the state of the sensor."""
         return self._state
 
-    def async_update(self) -> None:
+    async def async_update(self) -> None:
         """Fetch new state data for the sensor.
 
         This is the only method that should fetch new data for Home Assistant.
