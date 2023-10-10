@@ -9,11 +9,21 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.const import UnitOfTemperature
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 SCAN_INTERVAL = timedelta(minutes=10)
+
+
+async def async_setup_entry(
+    _hass: HomeAssistant,
+    _config_entry: ConfigEntry,
+    async_add_entities,
+) -> None:
+    """Setup sensors from a config entry created in the integrations UI."""
+    async_add_entities([ExampleSensor()])
 
 
 def async_setup_platform(
