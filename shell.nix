@@ -26,13 +26,18 @@ pkgs.mkShell {
           (buildPythonPackage rec {
             pname = "knvheatpumplib";
             version = "0.0.7";
-            #pyproject = true;
-            #doCheck = false;
+            pyproject = true;
+            doCheck = false;
 
             src = fetchPypi {
               inherit pname version;
-              sha256 = "sha256-3sC8kIL2qLwC+taYbrvZ0qIVD/Y0+nW/PwQWkO6jisU=";
+              sha256 = "sha256-+abauMfGTqjEKsMdgdBTjAxaALg5HjaQHqA8d724pUc=";
             };
+
+            nativeBuildInputs = [
+              setuptools
+              setuptools-scm
+            ];
           })
           (buildPythonPackage rec {
             pname = "homeassistant";
