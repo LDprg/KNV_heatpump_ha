@@ -32,4 +32,7 @@ async def async_setup(hass: HomeAssistant, _config: ConfigType):
 
 async def async_setup_entry(hass: HomeAssistant, _entry: ConfigEntry):
     """Setup up a config entry."""
+
     hass.states.async_set(knv.DOMAIN + '.Hello_World3', 'Works!')
+
+    return True
