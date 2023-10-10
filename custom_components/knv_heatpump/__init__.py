@@ -16,6 +16,7 @@ knv_heatpump:
 from __future__ import annotations
 
 from homeassistant.core import HomeAssistant
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.helpers.typing import ConfigType
 
 from . import const as knv
@@ -27,3 +28,8 @@ async def async_setup(hass: HomeAssistant, _config: ConfigType):
     hass.states.async_set(knv.DOMAIN + '.Hello_World', 'Works!')
 
     return True
+
+
+async def async_setup_entry(hass: HomeAssistant, _entry: ConfigEntry):
+    """Setup up a config entry."""
+    hass.states.async_set(knv.DOMAIN + '.Hello_World3', 'Works!')
