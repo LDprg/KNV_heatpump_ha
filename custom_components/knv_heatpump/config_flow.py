@@ -10,7 +10,6 @@ import arpreq as arp
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_ERROR, CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
-from homeassistant.data_entry_flow import AbortFlow
 
 from . import const as knv
 
@@ -35,6 +34,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
+                    title="test",
                     data=info,
                 )
             else:
