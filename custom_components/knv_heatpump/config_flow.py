@@ -6,12 +6,11 @@
 from __future__ import annotations
 
 import voluptuous as vol
+import arpreq as arp
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_ERROR, CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
 from homeassistant.data_entry_flow import AbortFlow
-
-from getmac import get_mac_address
 
 from . import const as knv
 
@@ -29,14 +28,13 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
         errors = {}
 
         if info is not None:
-            mac = get_mac_address(
-                ip=info[CONF_IP_ADDRESS], network_request=True)
+            mac = arp.arpreq(info[CONF_IP_ADDRESS])
 
             if mac is not None:
-                if await self.async_set_unique_id(mac + info[CONF_USERNAME]):
-                    raise AbortFlow("already_configured")
+                await self.async_set_unique_id(mac + info[CONF_USERNAME])
+                self._abort_if_unique_id_configured()
+
                 return self.async_create_entry(
-                    title="test",
                     data=info,
                 )
             else:

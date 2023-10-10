@@ -11,7 +11,7 @@
       }
     },
     "error": {
-      "already_configured_device": "Gerät bereits konfiguriert",
+      "already_configured": "Gerät bereits konfiguriert",
       "invalid_ip": "Keine gültige IP angegeben"
     }
   }

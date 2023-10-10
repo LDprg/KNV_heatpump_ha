@@ -25,13 +25,13 @@ pkgs.mkShell {
           voluptuous
           setuptools-scm
           (buildPythonPackage rec {
-            pname = "getmac";
-            version = "0.9.4";
+            pname = "arpreq";
+            version = "0.3.4";
             doCheck = false;
 
             src = fetchPypi {
               inherit pname version;
-              sha256 = "sha256-hHd1W2n/k6O1FLVOH7uOu1fY9OXDfnwYvO86Dx8UkjI=";
+              sha256 = "sha256-jTdG94xjlsRERgJuz+uPZF7Fhvry4AgY3pvnnfkPj9s=";
             };
           })
           (buildPythonPackage rec {
