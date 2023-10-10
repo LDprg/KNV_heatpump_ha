@@ -25,13 +25,13 @@ pkgs.mkShell {
           voluptuous
           (buildPythonPackage rec {
             pname = "knvheatpumplib";
-            version = "0.0.3";
-            pyproject = true;
-            doCheck = false;
+            version = "0.0.7";
+            #pyproject = true;
+            #doCheck = false;
 
             src = fetchPypi {
               inherit pname version;
-              sha256 = "sha256-uvH9tBxtpM0urnIuE1UA2pEzMqs/L1x9M6+bSSrLUjU=";
+              sha256 = "sha256-3sC8kIL2qLwC+taYbrvZ0qIVD/Y0+nW/PwQWkO6jisU=";
             };
           })
           (buildPythonPackage rec {
