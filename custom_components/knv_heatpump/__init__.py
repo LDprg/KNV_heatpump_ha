@@ -25,14 +25,12 @@ from . import const as knv
 async def async_setup(hass: HomeAssistant, _config: ConfigType):
     """Setup our skeleton component."""
 
-    hass.states.async_set(knv.DOMAIN + '.Hello_World', 'Works!')
-
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, _entry: ConfigEntry):
     """Setup up a config entry."""
 
-    hass.states.async_set(knv.DOMAIN + '.Hello_World3', 'Works!')
+    hass.states.async_set(knv.DOMAIN + '.Hello_World', 'Works!')
 
     return True
