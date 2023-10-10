@@ -15,6 +15,8 @@ from homeassistant.helpers import device_registry
 
 from . import const as knv
 
+ERR_BASE = "base"
+
 
 class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
     """
@@ -29,13 +31,15 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
         errors = {}
 
         if info is not None:
+            knv.LOGGER.info("Gathering mac address")
+
             try:
                 mac = arp.arpreq(info[CONF_IP_ADDRESS])
             except ValueError:
                 mac = None
 
             if mac is not None:
-                knv.LOGGER.info("Gathering mac address")
+                knv.LOGGER.info("Found mac: %s", mac)
 
                 await self.async_set_unique_id(device_registry.format_mac(mac))
                 self._abort_if_unique_id_configured()
@@ -48,7 +52,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
                 )
             else:
                 knv.LOGGER.error("Invalid IP")
-                errors[CONF_ERROR] = knv.ERR_INVALID_IP
+                errors[ERR_BASE] = knv.ERR_INVALID_IP
 
         return self.async_show_form(
             step_id="user",
