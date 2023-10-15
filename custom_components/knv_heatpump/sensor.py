@@ -30,7 +30,7 @@ async def async_setup_entry(
 
     values = await knvheatpump.get_data(
         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
-    async_add_entities([KnvSensor(val) for val in values])
+    async_add_entities([KnvSensor(val, values) for val in values])
 
 
 # async def async_setup_platform(
@@ -48,22 +48,21 @@ async def async_setup_entry(
 class KnvSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, val) -> None:
+    def __init__(self, path, values) -> None:
         """Initialize the sensor."""
-        self._state = val["value"]
-        self._uid = val["path"]
+        self.data = values[path]
 
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        return self._uid
+        return self.data["path"]
 
     @property
     def unique_id(self) -> str:
         """Return the unique ID of the sensor."""
-        return self._uid
+        return self.data["path"]
 
     @property
     def state(self) -> str | None:
         """Return the state of the sensor."""
-        return self._state
+        return self.data["value"]
