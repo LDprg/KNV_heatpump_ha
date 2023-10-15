@@ -11,5 +11,6 @@
         "heatpump",
         "heatpumps",
         "homeassistant"
-    ]
+    ],
+    "python.analysis.autoImportCompletions": true
 }

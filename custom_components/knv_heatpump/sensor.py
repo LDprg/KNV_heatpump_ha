@@ -31,12 +31,18 @@ async def async_setup_entry(
 
     values = await knvheatpump.get_data(
         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
-    async_add_entities([KnvSensor(val, values) for val in values])
+
+    classes = [KnvSensor(val, values) for val in values]
+    async_add_entities(classes)
+
+    def callbacks(uid, value):
+        for item in classes:
+            item.callback(uid, value)
 
     socket = knvheatpump.Socket()
 
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(await socket.create(config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD]))
+    loop.run_until_complete(await socket.create(config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks))
 
 
 # async def async_setup_platform(
@@ -57,6 +63,10 @@ class KnvSensor(SensorEntity):
     def __init__(self, path, values) -> None:
         """Initialize the sensor."""
         self.data = values[path]
+
+    def callback(self, uid, value):
+        if self.unique_id == uid:
+            self.coordinator.async_set_updated_data(value)
 
     @property
     def name(self) -> str:
