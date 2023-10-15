@@ -1,5 +1,6 @@
 """Platform for sensor integration."""
 from __future__ import annotations
+import asyncio
 
 from datetime import timedelta
 
@@ -31,6 +32,11 @@ async def async_setup_entry(
     values = await knvheatpump.get_data(
         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
     async_add_entities([KnvSensor(val, values) for val in values])
+
+    socket = knvheatpump.Socket()
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(await socket.create(config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD]))
 
 
 # async def async_setup_platform(
