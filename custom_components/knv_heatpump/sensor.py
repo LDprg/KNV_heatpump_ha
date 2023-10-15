@@ -64,7 +64,7 @@ class KNVCoordinator(DataUpdateCoordinator):
             knv.LOGGER,
             # Name of the data. For logging purposes.
             name="KNV",
-            update_interval=timedelta(minutes=2),
+            update_interval=timedelta(seconds=30),
         )
         self.config = config
         # self.socket = knvheatpump.Socket()
@@ -95,10 +95,10 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator, idx):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
-        self.idx = idx
-        self.data = None
-        self._attr_name = str(idx)
-        self._attr_unique_id = str(idx)
+        self.idx: int = idx
+        self.data: Any = None
+        self._attr_name = knv.DOMAIN + str(idx)
+        self._attr_unique_id = knv.DOMAIN + str(idx)
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -106,8 +106,11 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self.data = self.coordinator.data[self.idx]
 
         self._attr_name = self.data["path"] + " - " + self.data["name"]
-        self._attr_state = self.data["value"]
 
         self.coordinator.logger.info(self._attr_name)
 
         self.async_write_ha_state()
+
+    @property
+    def state(self) -> Any:
+        return self.data["value"]
