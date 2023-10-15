@@ -97,6 +97,8 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator, context=idx)
         self.idx = idx
         self.data = None
+        self._attr_name = idx
+        self._attr_unique_id = idx
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -104,7 +106,6 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self.data = self.coordinator.data[self.idx]
 
         self._attr_name = self.data["path"] + " - " + self.data["name"]
-        self._attr_unique_id = self.data["path"]
         self._attr_state = self.data["value"]
 
         self.coordinator.logger.info(self._attr_name)
