@@ -3,7 +3,7 @@
     "name": "KNV Heatpump",
     "codeowners": [ "@LDprg" ],
     "config_flow": true,
-    "requirements": ["knvheatpumplib>=0.0.7", "scapy", "async_timeout" ],
+    "requirements": ["knvheatpumplib>=0.0.9", "scapy", "async_timeout" ],
     "documentation": "https://github.com/LDprg/KNV_heatpump_ha",
     "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
     "iot_class": "local_polling",

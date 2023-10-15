@@ -55,7 +55,7 @@ class KnvSensor(SensorEntity):
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        return self.data["path"] + "-" + self.data["name"]
+        return self.data["path"] + " - " + self.data["name"]
 
     @property
     def unique_id(self) -> str:
