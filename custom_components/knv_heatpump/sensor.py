@@ -20,29 +20,29 @@ from knvheatpumplib import knvheatpump
 from . import const as knv
 
 
-# async def async_setup_entry(
-#     hass: HomeAssistant,
-#     config_entry: ConfigEntry,
-#     async_add_entities,
-# ) -> None:
-#     """Setup sensors from a config entry created in the integrations UI."""
-#     config = hass.data[knv.DOMAIN]
-
-#     values = await knvheatpump.get_data(
-#         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
-#     async_add_entities([KnvSensor(val) for val in values])
-
-
-async def async_setup_platform(
-    _hass: HomeAssistant,
-    config: ConfigType,
-    async_add_entities: AddEntitiesCallback,
-    _discovery_info: DiscoveryInfoType | None = None
+async def async_setup_entry(
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
+    async_add_entities,
 ) -> None:
-    """Set up the sensor platform."""
+    """Setup sensors from a config entry created in the integrations UI."""
+    config = config_entry.data
+
     values = await knvheatpump.get_data(
         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
     async_add_entities([KnvSensor(val) for val in values])
+
+
+# async def async_setup_platform(
+#     _hass: HomeAssistant,
+#     config: ConfigType,
+#     async_add_entities: AddEntitiesCallback,
+#     _discovery_info: DiscoveryInfoType | None = None
+# ) -> None:
+#     """Set up the sensor platform."""
+#     values = await knvheatpump.get_data(
+#         config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
+#     async_add_entities([KnvSensor(val) for val in values])
 
 
 class KnvSensor(SensorEntity):
