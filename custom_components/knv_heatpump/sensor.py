@@ -39,7 +39,7 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     async_add_entities(
-        KnvSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
+        KnvSensor(coordinator, idx) for idx, data in enumerate(coordinator.data)
     )
 
 
@@ -92,11 +92,10 @@ class KNVCoordinator(DataUpdateCoordinator):
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data):
+    def __init__(self, coordinator, idx):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
-        self.data = data
 
     @callback
     def _handle_coordinator_update(self) -> None:
