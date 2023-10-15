@@ -96,23 +96,13 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx = idx
+        self.data = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         self.data = self.coordinator.data[self.idx]
 
-    @property
-    def name(self) -> str:
-        """Return the name of the sensor."""
-        return self.data["path"] + " - " + self.data["name"]
-
-    @property
-    def unique_id(self) -> str:
-        """Return the unique ID of the sensor."""
-        return self.data["path"]
-
-    @property
-    def state(self) -> str | None:
-        """Return the state of the sensor."""
-        return self.data["value"]
+        self._attr_name = self.data["path"] + " - " + self.data["name"]
+        self._attr_unique_id = self.data["path"]
+        self._attr_state = self.data["value"]
