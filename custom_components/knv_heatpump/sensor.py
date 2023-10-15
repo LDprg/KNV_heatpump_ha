@@ -107,4 +107,6 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self._attr_unique_id = self.data["path"]
         self._attr_state = self.data["value"]
 
+        self.coordinator.logger.info(self._attr_name)
+
         self.async_write_ha_state()
