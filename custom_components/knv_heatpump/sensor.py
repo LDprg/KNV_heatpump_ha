@@ -8,59 +8,65 @@ from homeassistant.components.sensor import (
     SensorEntity,
     SensorStateClass,
 )
-from homeassistant.const import UnitOfTemperature
+
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-SCAN_INTERVAL = timedelta(seconds=5)
+from knvheatpumplib import knvheatpump
+
+from . import const as knv
 
 
 async def async_setup_entry(
-    _hass: HomeAssistant,
-    _config_entry: ConfigEntry,
+    hass: HomeAssistant,
+    config_entry: ConfigEntry,
     async_add_entities,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
-    async_add_entities([ExampleSensor()])
+    config = hass.data[knv.DOMAIN][config_entry.entry_id]
+    # Update our config
+    if config_entry.options:
+        config.update(config_entry.options)
+
+    values = await knvheatpump.get_data(
+        config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
+    async_add_entities([KnvSensor(val) for val in values])
 
 
-def async_setup_platform(
+async def async_setup_platform(
     _hass: HomeAssistant,
-    _config: ConfigType,
+    config: ConfigType,
     async_add_entities: AddEntitiesCallback,
     _discovery_info: DiscoveryInfoType | None = None
 ) -> None:
     """Set up the sensor platform."""
-    async_add_entities([ExampleSensor()])
+    values = await knvheatpump.get_data(
+        config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
+    async_add_entities([KnvSensor(val) for val in values])
 
 
-class ExampleSensor(SensorEntity):
+class KnvSensor(SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self) -> None:
+    def __init__(self, val) -> None:
         """Initialize the sensor."""
-        self._state = None
+        self._state = val["value"]
+        self._uid = val["path"]
 
     @property
     def name(self) -> str:
         """Return the name of the sensor."""
-        return 'Example Temperature'
+        return self._uid
 
     @property
     def unique_id(self) -> str:
         """Return the unique ID of the sensor."""
-        return "test_sensor"
+        return self._uid
 
     @property
-    def state(self) -> int | None:
+    def state(self) -> str | None:
         """Return the state of the sensor."""
         return self._state
-
-    async def async_update(self) -> None:
-        """Fetch new state data for the sensor.
-
-        This is the only method that should fetch new data for Home Assistant.
-        """
-        self._state = 23
