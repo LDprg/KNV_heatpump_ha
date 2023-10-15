@@ -26,14 +26,15 @@ async def async_setup_entry(
     async_add_entities,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
-    config = hass.data[knv.DOMAIN][config_entry.entry_id]
-    # Update our config
-    if config_entry.options:
-        config.update(config_entry.options)
+    pass
+    # config = hass.data[knv.DOMAIN][config_entry.entry_id]
+    # # Update our config
+    # if config_entry.options:
+    #     config.update(config_entry.options)
 
-    values = await knvheatpump.get_data(
-        config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
-    async_add_entities([KnvSensor(val) for val in values])
+    # values = await knvheatpump.get_data(
+    #     config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD])
+    # async_add_entities([KnvSensor(val) for val in values])
 
 
 async def async_setup_platform(
