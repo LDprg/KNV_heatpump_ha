@@ -64,7 +64,7 @@ class KNVCoordinator(DataUpdateCoordinator):
             knv.LOGGER,
             # Name of the data. For logging purposes.
             name="KNV",
-            update_interval=timedelta(seconds=30),
+            update_interval=timedelta(minutes=2),
         )
         self.config = config
         # self.socket = knvheatpump.Socket()
