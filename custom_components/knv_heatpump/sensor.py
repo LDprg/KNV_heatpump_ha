@@ -69,6 +69,7 @@ class KNVCoordinator(DataUpdateCoordinator):
         self.socket = knvheatpump.Socket()
 
         def callbacks(data):
+            self.logger.info(self.data["path"])
             self.async_set_updated_data(data)
 
         hass.async_create_task(self.socket.create(
