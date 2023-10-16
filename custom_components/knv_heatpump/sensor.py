@@ -69,11 +69,31 @@ class KNVCoordinator(DataUpdateCoordinator):
         self.socket = knvheatpump.Socket()
 
         async def callbacks(data):
-            self.logger.info(self.data)
-            self.async_set_updated_data(data)
+            try:
+                self.async_set_updated_data(data)
+            except Exception as e:
+                print(e)
 
         hass.async_create_task(self.socket.create(
             config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks))
+
+    @callback
+    def async_set_updated_data(self, data) -> None:
+        """Manually update data, notify listeners and reset refresh interval."""
+        self._async_unsub_refresh()
+        self._debounced_refresh.async_cancel()
+
+        self.data = data
+        self.last_update_success = True
+        self.logger.info(
+            "Manually updated %s data",
+            self.name,
+        )
+
+        if self._listeners:
+            self._schedule_refresh()
+
+        self.async_update_listeners()
 
     async def _async_update_data(self):
         data: Any = await knvheatpump.get_data(self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD])
