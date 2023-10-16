@@ -39,7 +39,7 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     async_add_entities(
-        KnvSensor(coordinator, idx) for idx, data in enumerate(coordinator.data)
+        KnvSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
     )
 
 
@@ -64,23 +64,19 @@ class KNVCoordinator(DataUpdateCoordinator):
             knv.LOGGER,
             # Name of the data. For logging purposes.
             name="KNV",
-            update_interval=timedelta(seconds=30),
         )
         self.config = config
-        # self.socket = knvheatpump.Socket()
+        self.socket = knvheatpump.Socket()
 
-        # def callbacks(uid, data):
-        #     self.async_set_updated_data({
-        #         "uid": uid,
-        #         "data": data
-        #     })
+        def callbacks(data):
+            self.async_set_updated_data(data)
 
-        # self.loop = asyncio.get_event_loop()
-        # self.loop.run_until_complete(asyncio.run(self.socket.create(
-        #     config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks)))
+        self.loop = asyncio.get_event_loop()
+        self.loop.run_until_complete(asyncio.run(self.socket.create(
+            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks)))  # type: ignore
 
     async def _async_update_data(self):
-        data = await knvheatpump.get_data(self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD])
+        data: Any = await knvheatpump.get_data(self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD])
 
         array = []
         for val in data:
@@ -92,20 +88,20 @@ class KNVCoordinator(DataUpdateCoordinator):
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx):
+    def __init__(self, coordinator, idx, data=None):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx: int = idx
-        self.data: Any = None
-        self._attr_name = knv.DOMAIN + str(idx)
-        self._attr_unique_id = knv.DOMAIN + str(idx)
+        self.data: Any = data
+
+        if data is not None:
+            self._attr_name = self.data["path"] + " - " + self.data["name"]
+            self._attr_unique_id = self.data["path"]
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
         self.data = self.coordinator.data[self.idx]
-
-        self._attr_name = self.data["path"] + " - " + self.data["name"]
 
         self.coordinator.logger.info(self._attr_name)
 
