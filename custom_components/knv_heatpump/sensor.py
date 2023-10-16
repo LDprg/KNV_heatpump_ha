@@ -71,8 +71,8 @@ class KNVCoordinator(DataUpdateCoordinator):
         def callbacks(data):
             self.async_set_updated_data(data)
 
-        hass.loop.run_forever(asyncio.run(self.socket.create(
-            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks)))  # type: ignore
+        hass.async_create_task(self.socket.create(
+            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks))
 
     async def _async_update_data(self):
         data: Any = await knvheatpump.get_data(self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD])
