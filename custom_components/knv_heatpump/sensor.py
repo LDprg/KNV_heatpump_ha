@@ -71,8 +71,7 @@ class KNVCoordinator(DataUpdateCoordinator):
         def callbacks(data):
             self.async_set_updated_data(data)
 
-        self.loop = asyncio.get_event_loop()
-        self.loop.run_until_complete(asyncio.run(self.socket.create(
+        hass.loop.run_forever(asyncio.run(self.socket.create(
             config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks)))  # type: ignore
 
     async def _async_update_data(self):
