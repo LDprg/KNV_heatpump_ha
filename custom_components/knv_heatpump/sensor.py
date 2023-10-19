@@ -121,11 +121,13 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self.data = self.coordinator.data
 
-        self.coordinator.logger.info(self._attr_name)
+        if self.coordinator.data["path"] == self.data["path"]:
+            self.data = self.coordinator.data
 
-        self.async_write_ha_state()
+            self.coordinator.logger.info(self._attr_name)
+
+            self.async_write_ha_state()
 
     @property
     def state(self) -> Any:
