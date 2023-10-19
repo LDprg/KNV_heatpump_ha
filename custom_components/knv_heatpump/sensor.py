@@ -121,7 +121,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self.data = self.coordinator.data[self.idx]
+        self.data = self.coordinator.data
 
         self.coordinator.logger.info(self._attr_name)
 
