@@ -123,7 +123,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         """Handle updated data from the coordinator."""
 
         if self.coordinator.data["path"] == self.data["path"]:
-            self.data = self.coordinator.data
+            self.data["value"] = self.coordinator.data["value"]
 
             self.coordinator.logger.info(self._attr_name)
 
