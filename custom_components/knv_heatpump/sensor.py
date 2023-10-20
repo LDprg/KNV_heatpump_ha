@@ -139,6 +139,9 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         types = self.data["type"]
 
         if types == 6:
-            return int(value)
+            try:
+                return float(value)
+            except TypeError:
+                return None
         else:
             return value
