@@ -74,8 +74,8 @@ class KNVCoordinator(DataUpdateCoordinator):
             except Exception as e:
                 print(e)
 
-        hass.async_create_task(self.socket.create(
-            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks))
+        asyncio.run_coroutine_threadsafe(self.socket.create(
+            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks), hass.loop)
 
     @callback
     def async_set_updated_data(self, data) -> None:
