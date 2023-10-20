@@ -114,9 +114,13 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self.idx: int = idx
         self.data: Any = data
 
-        if data is not None:
+        if self.data is not None:
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
+
+            if self.data["type"] == 6:
+                self._attr_device_class = SensorDeviceClass.TEMPERATURE
+                self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -131,4 +135,10 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def state(self) -> Any:
-        return self.data["value"]
+        value = self.data["value"]
+        types = self.data["type"]
+
+        if types == 6:
+            return int(value)
+        else:
+            return value
