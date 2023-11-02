@@ -145,5 +145,7 @@ class KNVReadSensor(KnvSensor, SensorEntity):
                 return float(value)
             except TypeError:
                 return None
+            except ValueError:
+                return None
         else:
             return value
