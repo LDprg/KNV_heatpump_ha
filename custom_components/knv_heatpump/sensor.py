@@ -85,7 +85,7 @@ class KNVCoordinator(DataUpdateCoordinator):
 
         self.data = data
         self.last_update_success = True
-        self.logger.info(
+        self.logger.debug(
             "Manually updated %s data",
             self.name,
         )
