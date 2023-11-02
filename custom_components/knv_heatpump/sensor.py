@@ -11,7 +11,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS, UnitOfEnergy
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -121,6 +121,10 @@ class KnvSensor(CoordinatorEntity):
             if self.data["type"] == 6:
                 self._attr_device_class = SensorDeviceClass.TEMPERATURE
                 self._attr_state_class = SensorStateClass.MEASUREMENT
+            elif self.data["type"] == 8:
+                self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
+                self._attr_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+                self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -140,7 +144,7 @@ class KNVReadSensor(KnvSensor, SensorEntity):
         value = self.data["value"]
         types = self.data["type"]
 
-        if types == 6:
+        if types == 6 or types == 8:
             try:
                 return float(value)
             except TypeError:
