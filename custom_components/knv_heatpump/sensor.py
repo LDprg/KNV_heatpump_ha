@@ -105,7 +105,7 @@ class KNVCoordinator(DataUpdateCoordinator):
         return array
 
 
-class KnvSensor(CoordinatorEntity, SensorEntity):
+class KnvSensor(CoordinatorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator, idx, data=None):
@@ -133,6 +133,9 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
 
             self.async_write_ha_state()
 
+
+
+class KNVReadSensor(KnvSensor, SensorEntity):
     @property
     def state(self) -> Any:
         value = self.data["value"]
@@ -145,3 +148,4 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
                 return None
         else:
             return value
+    

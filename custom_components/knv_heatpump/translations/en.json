@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Fill in your KNV Home login information",
+        "data": {
+          "ip_address": "IP Address",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "already_configured": "Device is already configured",
+      "invalid_ip": "IP doesn't match valid format"
+    }
+  }
+}

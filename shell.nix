@@ -43,7 +43,7 @@ pkgs.mkShell {
 
             src = fetchPypi {
               inherit pname version;
-              sha256 = "sha256-sidCJuXVgaRDON9euCpwrZ1IQOw6Bg6EMPwbgHsbIIA=";
+              sha256 = "sha256-NEN2I8qGLxDony9wG8SkggsrIugBeuFDG/Ffx7A6Wy0=";
             };
 
             nativeBuildInputs = [
