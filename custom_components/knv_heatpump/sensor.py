@@ -118,12 +118,14 @@ class KnvSensor(CoordinatorEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
+            if self.data["unit"] is not None:
+                self._attr_unit_of_measurement = self.data["unit"]
+
             if self.data["type"] == 6:
                 self._attr_device_class = SensorDeviceClass.TEMPERATURE
                 self._attr_state_class = SensorStateClass.MEASUREMENT
             elif self.data["type"] == 8:
                 self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
-                self._attr_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
                 self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @callback
