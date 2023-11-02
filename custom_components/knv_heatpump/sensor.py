@@ -39,7 +39,7 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     async_add_entities(
-        KnvSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
+        KNVReadSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
     )
 
 
@@ -134,7 +134,6 @@ class KnvSensor(CoordinatorEntity):
             self.async_write_ha_state()
 
 
-
 class KNVReadSensor(KnvSensor, SensorEntity):
     @property
     def state(self) -> Any:
@@ -148,4 +147,3 @@ class KNVReadSensor(KnvSensor, SensorEntity):
                 return None
         else:
             return value
-    
