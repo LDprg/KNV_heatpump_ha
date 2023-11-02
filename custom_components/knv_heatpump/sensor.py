@@ -2,8 +2,7 @@
 from __future__ import annotations
 import asyncio
 
-from datetime import timedelta
-from typing import Any, Coroutine
+from typing import Any
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -11,15 +10,12 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 
-from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS, UnitOfEnergy
+from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
     DataUpdateCoordinator,
-    UpdateFailed,
 )
 
 from knvheatpumplib import knvheatpump
@@ -39,7 +35,7 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     async_add_entities(
-        KNVReadSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
+        KnvSensor(coordinator, idx, data) for idx, data in enumerate(coordinator.data)
     )
 
 
@@ -105,7 +101,7 @@ class KNVCoordinator(DataUpdateCoordinator):
         return array
 
 
-class KnvSensor(CoordinatorEntity):
+class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator, idx, data=None):
@@ -124,6 +120,9 @@ class KnvSensor(CoordinatorEntity):
             elif self.data["type"] == 8:
                 self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
                 self._attr_state_class = SensorStateClass.MEASUREMENT
+            else:
+                self._attr_device_class = None
+                self._attr_state_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -136,8 +135,6 @@ class KnvSensor(CoordinatorEntity):
 
             self.async_write_ha_state()
 
-
-class KNVReadSensor(KnvSensor, SensorEntity):
     @property
     def state(self) -> Any:
         value = self.data["value"]
@@ -155,4 +152,7 @@ class KNVReadSensor(KnvSensor, SensorEntity):
 
     @property
     def unit_of_measurement(self) -> str | None:
-        return self.data["unit"]
+        if self.data["unit"]:
+            return self.data["unit"]
+        else:
+            return None
