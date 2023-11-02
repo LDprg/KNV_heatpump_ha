@@ -118,9 +118,6 @@ class KnvSensor(CoordinatorEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
-            if self.data["unit"] is not None:
-                self._attr_unit_of_measurement = self.data["unit"]
-
             if self.data["type"] == 6:
                 self._attr_device_class = SensorDeviceClass.TEMPERATURE
                 self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -155,3 +152,7 @@ class KNVReadSensor(KnvSensor, SensorEntity):
                 return None
         else:
             return value
+
+    @property
+    def unit_of_measurement(self) -> str | None:
+        return self.data["unit"]
