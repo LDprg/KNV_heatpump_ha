@@ -37,7 +37,7 @@ pkgs.mkShell {
           })
           (buildPythonPackage rec {
             pname = "knvheatpumplib";
-            version = "0.0.16";
+            version = "0.0.20";
             pyproject = true;
             doCheck = false;
 
