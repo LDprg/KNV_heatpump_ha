@@ -33,7 +33,7 @@ async def async_setup_entry(
     read = []
 
     for data in coordinator.data:
-        if not (data["writeable"] == "True" and (data["type"] == 6 or data["type"] == 8)):
+        if data["writeable"] != "True" or (data["type"] != 6 and data["type"] != 8):
             read.append(data)
 
     async_add_entities(
