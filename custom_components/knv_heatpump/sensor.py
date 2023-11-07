@@ -42,6 +42,8 @@ async def async_setup_entry(
     write = []
 
     for data in coordinator.data:
+        knv.LOGGER.warn("Enitity %s writable is %s",
+                        data["path"], data["writeable"])
         if bool(data["writeable"]) and (data["type"] == 6 or data["type"] == 8):
             write.append(data)
         else:
