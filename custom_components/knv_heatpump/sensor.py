@@ -42,7 +42,7 @@ async def async_setup_entry(
     write = []
 
     for data in coordinator.data:
-        if data["writeable"] and (data["type"] == 6 or data["type"] == 8):
+        if bool(data["writeable"]) and (data["type"] == 6 or data["type"] == 8):
             write.append(data)
         else:
             read.append(data)
@@ -221,5 +221,5 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
             return None
 
     async def async_set_native_value(self, value: float):
-        if self.data["writeable"]:
+        if bool(self.data["writeable"]):
             self.coordinator.socket.send(self.data["path"], value)
