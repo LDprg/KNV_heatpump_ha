@@ -56,13 +56,12 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
             self._attr_native_max_value = self.data["max"]
             self._attr_native_min_value = self.data["min"]
             self._attr_native_step = self.data["step"]
+            self._attr_native_unit_of_measurement = self.data["unit"]
 
             if self.data["type"] == 6:
                 self._attr_device_class = NumberDeviceClass.TEMPERATURE
             elif self.data["type"] == 8:
                 self._attr_device_class = NumberDeviceClass.ENERGY_STORAGE
-            else:
-                self._attr_device_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -70,32 +69,11 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
 
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
+            self._attr_native_value = self.data["value"]
 
             self.coordinator.logger.info(self._attr_name)
 
             self.async_write_ha_state()
-
-    @property
-    def state(self) -> Any:
-        value = self.data["value"]
-        types = self.data["type"]
-
-        if types == 6 or types == 8:
-            try:
-                return float(value)
-            except TypeError:
-                return None
-            except ValueError:
-                return None
-        else:
-            return value
-
-    @property
-    def unit_of_measurement(self) -> str | None:
-        if self.data["unit"]:
-            return self.data["unit"]
-        else:
-            return None
 
     async def async_set_native_value(self, value: float):
         if self.data["writeable"] is True:
