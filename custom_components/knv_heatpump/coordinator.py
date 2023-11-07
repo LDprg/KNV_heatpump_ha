@@ -22,8 +22,7 @@ class KNVCoordinator(DataUpdateCoordinator):
         super().__init__(
             hass,
             knv.LOGGER,
-            # Name of the data. For logging purposes.
-            name="KNV",
+            name=knv.DOMAIN,
         )
         self.config = config
         self.socket = knvheatpump.Socket()

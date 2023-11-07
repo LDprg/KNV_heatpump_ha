@@ -29,17 +29,14 @@ from homeassistant.helpers.typing import ConfigType
 from . import const as knv
 
 
-# async def async_setup(hass: HomeAssistant, _config: ConfigType):
-#     """Setup up a config."""
-
-#     return True
-
-
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Setup up a config entry."""
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor"),
+        hass.config_entries.async_forward_entry_setup(entry, "sensor")
+    )
+
+    hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(entry, "numbers")
     )
 

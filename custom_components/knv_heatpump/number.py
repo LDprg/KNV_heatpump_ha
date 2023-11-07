@@ -36,8 +36,7 @@ async def async_setup_entry(
             write.append(data)
 
     async_add_entities(
-        KnvWriteSensor(coordinator, idx, data)
-        for idx, data in enumerate(write)
+        KnvWriteSensor(coordinator, idx, data) for idx, data in enumerate(write)
     )
 
 
