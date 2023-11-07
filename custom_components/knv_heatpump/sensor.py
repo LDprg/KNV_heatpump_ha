@@ -78,18 +78,21 @@ class KnvReadSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def state(self) -> Any:
-        value = self.data["value"]
-        types = self.data["type"]
+        if self.data["value"] and self.data["type"]:
+            value = self.data["value"]
+            types = self.data["type"]
 
-        if types == 6 or types == 8:
-            try:
-                return float(value)
-            except TypeError:
-                return None
-            except ValueError:
-                return None
+            if types == 6 or types == 8:
+                try:
+                    return float(value)
+                except TypeError:
+                    return None
+                except ValueError:
+                    return None
+            else:
+                return value
         else:
-            return value
+            return None
 
     @property
     def unit_of_measurement(self) -> str | None:

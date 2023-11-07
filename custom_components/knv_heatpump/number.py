@@ -53,7 +53,7 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
-            if self.data["value"] is not None:
+            if self.data["value"]:
                 self._attr_native_value = self.data["value"]
 
             self._attr_native_max_value = float(self.data["max"])
