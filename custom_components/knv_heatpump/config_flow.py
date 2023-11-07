@@ -35,7 +35,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             knv.LOGGER.info("Gathering mac address")
 
             try:
-                mac = getmacbyip(info[CONF_IP_ADDRESS].strip())
+                mac = await self.hass.async_add_executor_job(getmacbyip(info[CONF_IP_ADDRESS].strip()))
             except ValueError:
                 mac = None
 
