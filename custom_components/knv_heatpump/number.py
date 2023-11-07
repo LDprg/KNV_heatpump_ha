@@ -31,11 +31,8 @@ async def async_setup_entry(
     data = coordinator.data
     write = []
 
-    coordinator.logger.warn("read setup")
-
     for data in coordinator.data:
         if data["writeable"] is True and (data["type"] == 6 or data["type"] == 8):
-            coordinator.logger.warn("%s write", data["path"])
             write.append(data)
 
     async_add_entities(
@@ -56,9 +53,9 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
-            self.native_max_value = self.data["max"]
-            self.native_min_value = self.data["min"]
-            self.native_step = self.data["step"]
+            self._attr_native_max_value = self.data["max"]
+            self._attr_native_min_value = self.data["min"]
+            self._attr_native_step = self.data["step"]
 
             if self.data["type"] == 6:
                 self._attr_device_class = NumberDeviceClass.TEMPERATURE
