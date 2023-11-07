@@ -3,10 +3,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
+from homeassistant.components.number import (
+    NumberDeviceClass,
+    NumberEntity,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -30,19 +29,19 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     data = coordinator.data
-    read = []
+    write = []
 
     for data in coordinator.data:
-        if not (data["writeable"] == "True" and (data["type"] == 6 or data["type"] == 8)):
-            read.append(data)
+        if data["writeable"] == "True" and (data["type"] == 6 or data["type"] == 8):
+            write.append(data)
 
     async_add_entities(
-        (KnvReadSensor(coordinator, idx, data)
-         for idx, data in enumerate(read))
+        KnvWriteSensor(coordinator, idx, data)
+        for idx, data in enumerate(write)
     )
 
 
-class KnvReadSensor(CoordinatorEntity, SensorEntity):
+class KnvWriteSensor(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator, idx, data=None):
@@ -55,15 +54,16 @@ class KnvReadSensor(CoordinatorEntity, SensorEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
+            self.native_max_value = self.data["max"]
+            self.native_min_value = self.data["min"]
+            self.native_step = self.data["step"]
+
             if self.data["type"] == 6:
-                self._attr_device_class = SensorDeviceClass.TEMPERATURE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
+                self._attr_device_class = NumberDeviceClass.TEMPERATURE
             elif self.data["type"] == 8:
-                self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
+                self._attr_device_class = NumberDeviceClass.ENERGY_STORAGE
             else:
                 self._attr_device_class = None
-                self._attr_state_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -97,3 +97,7 @@ class KnvReadSensor(CoordinatorEntity, SensorEntity):
             return self.data["unit"]
         else:
             return None
+
+    async def async_set_native_value(self, value: float):
+        if self.data["writeable"] == "True":
+            self.coordinator.socket.send(self.data["path"], value)
