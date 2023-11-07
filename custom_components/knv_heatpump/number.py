@@ -75,6 +75,5 @@ class KnvWriteSensor(CoordinatorEntity, NumberEntity):
 
             self.async_write_ha_state()
 
-    async def async_set_native_value(self, value: float):
-        if self.data["writeable"] is True:
-            self.coordinator.socket.send(self.data["path"], value)
+    async def async_set_native_value(self, value: float) -> None:
+        self.coordinator.socket.send(self.data["path"], value)
