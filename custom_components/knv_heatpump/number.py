@@ -33,6 +33,7 @@ async def async_setup_entry(
 
     for data in coordinator.data:
         if data["writeable"] == "True" and (data["type"] == 6 or data["type"] == 8):
+            coordinator.logger.warning("%s write", data["path"])
             write.append(data)
 
     async_add_entities(
