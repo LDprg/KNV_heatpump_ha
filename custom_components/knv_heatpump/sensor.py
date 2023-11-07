@@ -32,6 +32,8 @@ async def async_setup_entry(
     data = coordinator.data
     read = []
 
+    coordinator.logger.warn("read setup")
+
     for data in coordinator.data:
         if data["writeable"] is not True or (data["type"] != 6 and data["type"] != 8):
             coordinator.logger.warn("%s read", data["path"])
