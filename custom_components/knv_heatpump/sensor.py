@@ -78,7 +78,7 @@ class KnvReadSensor(CoordinatorEntity, SensorEntity):
 
     @property
     def state(self) -> Any:
-        if self.data["value"] and self.data["type"]:
+        if "value" in self.data and "type" in self.data:
             value = self.data["value"]
             types = self.data["type"]
 
