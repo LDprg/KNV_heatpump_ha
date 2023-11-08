@@ -60,6 +60,8 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         """Translates value to text"""
         for data in self.data["listentries"]:
             if value == data["value"]:
+                self.coordinator.logger.warn(
+                    "%s: %s -- %s", self.data["path"], value, data["text"])
                 return data["text"]
 
     def knv_get_value(self, option):
