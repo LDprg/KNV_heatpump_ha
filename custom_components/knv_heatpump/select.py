@@ -53,13 +53,20 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
                 self._attr_options.append(data["text"])
 
             if "value" in self.data:
-                self._attr_current_option = self.knv_get_option()
+                self._attr_current_option = self.knv_get_option(
+                    self.data["value"])
 
-    def knv_get_option(self):
+    def knv_get_option(self, value):
         """Translates value to text"""
         for data in self.data["listentries"]:
-            if self.data["value"] == data["value"]:
+            if value == data["value"]:
                 return data["text"]
+
+    def knv_get_value(self, option):
+        """Translates value to text"""
+        for data in self.data["listentries"]:
+            if option == data["text"]:
+                return data["value"]
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -68,8 +75,12 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
-            self._attr_current_option = self.knv_get_option()
+            self._attr_current_option = self.knv_get_option(self.data["value"])
 
             self.coordinator.logger.info(self._attr_name)
 
             self.async_write_ha_state()
+
+    async def async_select_option(self, option: str) -> None:
+        """Change the selected option."""
+        await self.coordinator.socket.send(self.data["path"], self.knv_get_value(option))
