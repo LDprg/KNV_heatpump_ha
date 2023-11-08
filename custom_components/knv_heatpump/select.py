@@ -3,11 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from homeassistant.components.sensor import (
-    SensorDeviceClass,
-    SensorEntity,
-    SensorStateClass,
-)
+from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import (
@@ -32,19 +28,18 @@ async def async_setup_entry(
     await coordinator.async_config_entry_first_refresh()
 
     data = coordinator.data
-    read = []
+    write = []
 
     for data in coordinator.data:
-        if knv.getType(data) == knv.Type.SENSOR:
-            read.append(data)
+        if knv.getType(data) == knv.Type.SELECT:
+            write.append(data)
 
     async_add_entities(
-        (KnvSensor(coordinator, idx, data)
-         for idx, data in enumerate(read))
+        KnvSelect(coordinator, idx, data) for idx, data in enumerate(write)
     )
 
 
-class KnvSensor(CoordinatorEntity, SensorEntity):
+class KnvSelect(CoordinatorEntity, SelectEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator, idx, data=None):
@@ -57,15 +52,8 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
-            if self.data["type"] == 6:
-                self._attr_device_class = SensorDeviceClass.TEMPERATURE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
-            elif self.data["type"] == 8:
-                self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
-            else:
-                self._attr_device_class = None
-                self._attr_state_class = None
+            for data in self.data["listentries"]:
+                self._attr_options.append(data["text"])
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -77,28 +65,3 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             self.coordinator.logger.info(self._attr_name)
 
             self.async_write_ha_state()
-
-    @property
-    def state(self) -> Any:
-        if "value" in self.data and "type" in self.data:
-            value = self.data["value"]
-            types = self.data["type"]
-
-            if types == 6 or types == 8:
-                try:
-                    return float(value)
-                except TypeError:
-                    return None
-                except ValueError:
-                    return None
-            else:
-                return value
-        else:
-            return None
-
-    @property
-    def unit_of_measurement(self) -> str | None:
-        if self.data["unit"]:
-            return self.data["unit"]
-        else:
-            return None

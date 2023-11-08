@@ -16,6 +16,8 @@ from homeassistant.helpers.update_coordinator import (
 
 from .coordinator import KNVCoordinator
 
+from . import const as knv
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -32,15 +34,15 @@ async def async_setup_entry(
     write = []
 
     for data in coordinator.data:
-        if data["writeable"] is True and (data["type"] == 6 or data["type"] == 8):
+        if knv.getType(data) == knv.Type.NUMBER:
             write.append(data)
 
     async_add_entities(
-        KnvWriteSensor(coordinator, idx, data) for idx, data in enumerate(write)
+        KnvNumber(coordinator, idx, data) for idx, data in enumerate(write)
     )
 
 
-class KnvWriteSensor(CoordinatorEntity, NumberEntity):
+class KnvNumber(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
     def __init__(self, coordinator, idx, data=None):
