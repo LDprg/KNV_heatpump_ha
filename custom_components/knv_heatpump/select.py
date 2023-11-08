@@ -52,6 +52,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
             self._attr_name = self.data["path"] + " - " + self.data["name"]
             self._attr_unique_id = self.data["path"]
 
+            self._attr_options = []
             for data in self.data["listentries"]:
                 self._attr_options.append(data["text"])
 
