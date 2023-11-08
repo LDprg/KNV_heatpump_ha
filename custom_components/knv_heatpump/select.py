@@ -24,7 +24,6 @@ async def async_setup_entry(
     """Setup sensors from a config entry created in the integrations UI."""
     coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
-    data = coordinator.data
     select = []
 
     for data in coordinator.data:
