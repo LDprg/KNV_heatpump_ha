@@ -53,9 +53,16 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
             self._attr_unique_id = self.data["path"]
 
             self._attr_options = []
-            self._attr_current_option = None
             for data in self.data["listentries"]:
                 self._attr_options.append(data["text"])
+
+            if "value" in self.data:
+                self._attr_current_option = self.knv_get_option()
+
+    def knv_get_option(self):
+        for data in self.data["listentries"]:
+            if self.data["value"] == data["value"]:
+                return data["text"]
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -64,9 +71,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
-            for data in self.data["listentries"]:
-                if self.data["value"] == data["value"]:
-                    self._attr_current_option = data["text"]
+            self._attr_current_option = self.knv_get_option()
 
             self.coordinator.logger.info(self._attr_name)
 
