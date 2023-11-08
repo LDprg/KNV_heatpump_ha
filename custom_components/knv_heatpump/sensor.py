@@ -22,25 +22,22 @@ from . import const as knv
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    _config_entry: ConfigEntry,
     async_add_entities,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
-    config = config_entry.data
-    coordinator = KNVCoordinator(hass, config)
-
-    await coordinator.async_config_entry_first_refresh()
+    coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
     data = coordinator.data
-    read = []
+    sensor = []
 
     for data in coordinator.data:
         if knv.getType(data) == knv.Type.SENSOR:
-            read.append(data)
+            sensor.append(data)
 
     async_add_entities(
         (KnvSensor(coordinator, idx, data)
-         for idx, data in enumerate(read))
+         for idx, data in enumerate(sensor))
     )
 
 

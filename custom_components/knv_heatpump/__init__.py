@@ -25,23 +25,32 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.typing import ConfigType
 
+from .coordinator import KNVCoordinator
 
 from . import const as knv
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     """Setup up a config entry."""
+    config = config_entry.data
+    coordinator = KNVCoordinator(hass, config)
+
+    await coordinator.async_config_entry_first_refresh()
+
+    hass.data[knv.DOMAIN] = {
+        "coord": coordinator
+    }
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "sensor")
+        hass.config_entries.async_forward_entry_setup(config_entry, "sensor")
     )
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "number")
+        hass.config_entries.async_forward_entry_setup(config_entry, "number")
     )
 
     hass.async_create_task(
-        hass.config_entries.async_forward_entry_setup(entry, "select")
+        hass.config_entries.async_forward_entry_setup(config_entry, "select")
     )
 
     return True

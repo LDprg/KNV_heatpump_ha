@@ -18,24 +18,21 @@ from . import const as knv
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    _config_entry: ConfigEntry,
     async_add_entities,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
-    config = config_entry.data
-    coordinator = KNVCoordinator(hass, config)
-
-    await coordinator.async_config_entry_first_refresh()
+    coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
     data = coordinator.data
-    write = []
+    select = []
 
     for data in coordinator.data:
         if knv.getType(data) == knv.Type.SELECT:
-            write.append(data)
+            select.append(data)
 
     async_add_entities(
-        KnvSelect(coordinator, idx, data) for idx, data in enumerate(write)
+        KnvSelect(coordinator, idx, data) for idx, data in enumerate(select)
     )
 
 
@@ -60,6 +57,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
                 self._attr_current_option = self.knv_get_option()
 
     def knv_get_option(self):
+        """Translates value to text"""
         for data in self.data["listentries"]:
             if self.data["value"] == data["value"]:
                 return data["text"]
