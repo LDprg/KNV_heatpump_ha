@@ -37,13 +37,13 @@ pkgs.mkShell {
           })
           (buildPythonPackage rec {
             pname = "knvheatpumplib";
-            version = "0.0.23";
+            version = "0.0.24";
             pyproject = true;
             doCheck = false;
 
             src = fetchPypi {
               inherit pname version;
-              sha256 = "sha256-lu/Kiq27rMLvUnPqCJOqNqr3WUlGiwwHM5H3//XY0XM=";
+              sha256 = "";
             };
 
             nativeBuildInputs = [
