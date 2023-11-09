@@ -63,6 +63,8 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
                 self._attr_device_class = NumberDeviceClass.TEMPERATURE
             elif self.data["type"] == 8:
                 self._attr_device_class = NumberDeviceClass.ENERGY_STORAGE
+            elif self.data["type"] == 4:
+                self._attr_device_class = NumberDeviceClass.DURATION
 
     @callback
     def _handle_coordinator_update(self) -> None:
