@@ -59,6 +59,9 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             elif self.data["type"] == 8:
                 self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
                 self._attr_state_class = SensorStateClass.MEASUREMENT
+            elif self.data["type"] == 4:
+                self._attr_device_class = SensorDeviceClass.DURATION
+                self._attr_state_class = SensorStateClass.MEASUREMENT
             else:
                 self._attr_device_class = None
                 self._attr_state_class = None
