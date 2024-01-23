@@ -79,7 +79,7 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
             self.async_write_ha_state()
 
     async def async_set_native_value(self, value: float) -> None:
-        if self.date["writeable"] is True:
+        if bool(self.date["writeable"]) is True:
             await self.coordinator.socket.send(self.data["path"], value)
         else:
             raise NotImplementedError()

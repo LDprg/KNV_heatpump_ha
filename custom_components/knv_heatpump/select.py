@@ -85,7 +85,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        if self.date["writeable"] is True:
+        if bool(self.date["writeable"]) is True:
             await self.coordinator.socket.send(self.data["path"], self.knv_get_value(option))
         else:
             raise NotImplementedError()
