@@ -56,7 +56,9 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
 
             self._attr_native_max_value = float(self.data["max"])
             self._attr_native_min_value = float(self.data["min"])
-            self._attr_native_step = float(self.data["step"])
+            
+            self._attr_native_step = max(1.0, float(self.data["step"]))
+            
             self._attr_native_unit_of_measurement = self.data["unit"]
 
             if self.data["type"] == 6:
