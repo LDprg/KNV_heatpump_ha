@@ -47,6 +47,8 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
         super().__init__(coordinator)
         self.path = path
 
+        knv.LOGGER.info("Init: %s", path)
+
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
 
@@ -66,6 +68,8 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
             self._attr_device_class = NumberDeviceClass.POWER
         elif self.get_data()["type"] == 4:
             self._attr_device_class = NumberDeviceClass.DURATION
+
+        knv.LOGGER.info("Finish init: %s", path)
 
     @callback
     def _handle_coordinator_update(self) -> None:

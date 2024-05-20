@@ -42,8 +42,9 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
     def __init__(self, coordinator, path):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
-
         self.path = path
+
+        knv.LOGGER.info("Init: %s", path)
 
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
@@ -54,6 +55,8 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         if "value" in self.get_data():
             self.current_option = self.knv_get_option(
                 self.get_data()["value"])
+
+        knv.LOGGER.info("Finish init: %s", path)
 
     @callback
     def _handle_coordinator_update(self) -> None:

@@ -49,12 +49,10 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self.path = path
 
-        knv.LOGGER.warn("Init: %s", path)
+        knv.LOGGER.info("Init: %s", path)
 
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
-
-        knv.LOGGER.warn("Set Value: %s", path)
 
         if self.get_data()["type"] == 6 or self.get_data()["type"] == 8:
             try:
@@ -82,7 +80,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             self._attr_device_class = None
             self._attr_state_class = None
 
-        knv.LOGGER.warn("Finish init: %s", path)
+        knv.LOGGER.info("Finish init: %s", path)
 
     @callback
     def _handle_coordinator_update(self) -> None:
