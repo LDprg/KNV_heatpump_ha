@@ -48,25 +48,25 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
         self.data: Any = data
 
         if self.data is not None:
-            self._attr_name = self.data["path"] + " - " + self.data["name"]
-            self._attr_unique_id = self.data["path"]
+            self.name = self.data["path"] + " - " + self.data["name"]
+            self.unique_id = self.data["path"]
 
             if "value" in self.data:
-                self._attr_native_value = self.data["value"]
+                self.native_value = self.data["value"]
 
-            self._attr_native_max_value = float(self.data["max"])
-            self._attr_native_min_value = float(self.data["min"])
+            self.native_max_value = float(self.data["max"])
+            self.native_min_value = float(self.data["min"])
             
-            self._attr_native_step = max(1.0, float(self.data["step"]))
+            self.native_step = max(1.0, float(self.data["step"]))
             
-            self._attr_native_unit_of_measurement = self.data["unit"]
+            self.native_unit_of_measurement = self.data["unit"]
 
             if self.data["type"] == 6:
-                self._attr_device_class = NumberDeviceClass.TEMPERATURE
+                self.device_class = NumberDeviceClass.TEMPERATURE
             elif self.data["type"] == 8:
-                self._attr_device_class = NumberDeviceClass.ENERGY_STORAGE
+                self.device_class = NumberDeviceClass.ENERGY_STORAGE
             elif self.data["type"] == 4:
-                self._attr_device_class = NumberDeviceClass.DURATION
+                self.device_class = NumberDeviceClass.DURATION
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -74,9 +74,9 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
 
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
-            self._attr_native_value = self.data["value"]
+            self.native_value = self.data["value"]
 
-            self.coordinator.logger.info(self._attr_name)
+            self.coordinator.logger.info(self.name)
 
             self.async_write_ha_state()
 

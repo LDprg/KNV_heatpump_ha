@@ -50,21 +50,21 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self.data: Any = data
 
         if self.data is not None:
-            self._attr_name = self.data["path"] + " - " + self.data["name"]
-            self._attr_unique_id = self.data["path"]
+            self.name = self.data["path"] + " - " + self.data["name"]
+            self.unique_id = self.data["path"]
 
             if self.data["type"] == 6:
-                self._attr_device_class = SensorDeviceClass.TEMPERATURE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
+                self.device_class = SensorDeviceClass.TEMPERATURE
+                self.state_class = SensorStateClass.MEASUREMENT
             elif self.data["type"] == 8:
-                self._attr_device_class = SensorDeviceClass.ENERGY_STORAGE
-                self._attr_state_class = SensorStateClass.MEASUREMENT
+                self.device_class = SensorDeviceClass.ENERGY_STORAGE
+                self.state_class = SensorStateClass.MEASUREMENT
             elif self.data["type"] == 4:
-                self._attr_device_class = SensorDeviceClass.DURATION
-                self._attr_state_class = SensorStateClass.MEASUREMENT
+                self.device_class = SensorDeviceClass.DURATION
+                self.state_class = SensorStateClass.MEASUREMENT
             else:
-                self._attr_device_class = None
-                self._attr_state_class = None
+                self.device_class = None
+                self.state_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
@@ -73,7 +73,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
-            self.coordinator.logger.info(self._attr_name)
+            self.coordinator.logger.info(self.name)
 
             self.async_write_ha_state()
 

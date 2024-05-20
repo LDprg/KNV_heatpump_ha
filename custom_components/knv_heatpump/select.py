@@ -45,15 +45,15 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         self.data: Any = data
 
         if self.data is not None:
-            self._attr_name = self.data["path"] + " - " + self.data["name"]
-            self._attr_unique_id = self.data["path"]
+            self.name = self.data["path"] + " - " + self.data["name"]
+            self.unique_id = self.data["path"]
 
-            self._attr_options = []
+            self.options = []
             for data in self.data["listentries"]:
-                self._attr_options.append(data["text"])
+                self.options.append(data["text"])
 
             if "value" in self.data:
-                self._attr_current_option = self.knv_get_option(
+                self.current_option = self.knv_get_option(
                     self.data["value"])
 
     def knv_get_option(self, value):
@@ -77,9 +77,9 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
-            self._attr_current_option = self.knv_get_option(self.data["value"])
+            self.current_option = self.knv_get_option(self.data["value"])
 
-            self.coordinator.logger.info(self._attr_name)
+            self.coordinator.logger.info(self.name)
 
             self.async_write_ha_state()
 
