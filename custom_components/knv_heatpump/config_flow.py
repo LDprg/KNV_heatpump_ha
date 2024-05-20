@@ -12,7 +12,7 @@ from homeassistant import config_entries
 from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_IP_ADDRESS
 from homeassistant.helpers import device_registry
 
-from scapy.layers.l2 import getmacbyip
+from getmac import get_mac_address
 
 from . import const as knv
 
@@ -35,7 +35,7 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             knv.LOGGER.info("Gathering mac address")
 
             try:
-                mac = getmacbyip(info[CONF_IP_ADDRESS].strip())
+                mac = get_mac_address(ip=info[CONF_IP_ADDRESS].strip(), network_request=True)
             except ValueError:
                 mac = None
 
