@@ -66,7 +66,8 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         else:
             self._attr_native_value = self.get_data()["value"]
 
-        self._attr_native_unit_of_measurement = self.get_data()["unit"]
+        if self.get_data()["unit"]:
+            self._attr_native_unit_of_measurement = self.get_data()["unit"]
 
         if self.get_data()["type"] == 6:
             self._attr_device_class = SensorDeviceClass.TEMPERATURE
