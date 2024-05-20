@@ -24,19 +24,20 @@ class KNVCoordinator(DataUpdateCoordinator):
             knv.LOGGER,
             name=knv.DOMAIN,
         )
+        self.hass = hass
         self.config = config
         self.socket = knvheatpump.Socket()
         self.data = {}
         self.paths = []
 
+        self.createSocket()
+
+    def createSocket():
         async def callbacks(data):
             try:
                 self.async_set_updated_data(data)
             except Exception as e:
                 print(e)
 
-        self.createSocket()
-
-    def createSocket():
         asyncio.run_coroutine_threadsafe(self.socket.create(
-            config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks), hass.loop)
+            self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD], callbacks), self.hass.loop)
