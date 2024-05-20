@@ -31,8 +31,11 @@ async def async_setup_entry(
         """Listen for new measurements and add sensors if they did not exist."""
         for path in coordinator.data:
             if knv.getType(coordinator.data[path]) == knv.Type.SENSOR:
+                knv.LOGGER.warn("Found: %s", path)
                 if not path in coordinator.paths:
                     coordinator.paths.append(path)
+
+                    knv.LOGGER.warn("Add: %s", path)
 
                     async_add_entities(
                         [KnvSensor(coordinator, path)]
@@ -48,6 +51,8 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
         self.path = path
+
+        knv.LOGGER.warn("Init: %s", path)
 
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
