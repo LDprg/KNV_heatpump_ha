@@ -17,7 +17,7 @@ class Type(Enum):
 
 
 def getType(data):
-    if data["writeable"] is True:
+    if data.get("writeable") is True:
         if data["type"] == 4 or data["type"] == 6 or data["type"] == 8:
             return Type.NUMBER
 
