@@ -80,5 +80,5 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
         else:
             raise NotImplementedError()
 
-    def get_data():
+    def get_data(self):
         return self.coordinator.data[self.path]

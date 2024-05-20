@@ -71,7 +71,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         else:
             raise NotImplementedError()
 
-    def get_data():
+    def get_data(self):
         return self.coordinator.data[self.path]
 
     def knv_get_option(self, value):

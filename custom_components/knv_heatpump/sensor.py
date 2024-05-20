@@ -93,5 +93,5 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             self._attr_native_value = self.get_data()["value"]
         self.async_write_ha_state()
 
-    def get_data():
+    def get_data(self):
         return self.coordinator.data[self.path]
