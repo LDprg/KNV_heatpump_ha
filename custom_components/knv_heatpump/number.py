@@ -28,7 +28,6 @@ async def async_setup_entry(
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
         for path in coordinator.data:
-            knv.LOGGER.info("Select: %s", path)
             if knv.getType(coordinator.data[path]) == knv.Type.NUMBER:
                 if not path in coordinator.paths:
                     coordinator.paths.append(path)
