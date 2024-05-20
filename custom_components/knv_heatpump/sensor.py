@@ -52,6 +52,19 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         if self.data is not None:
             self.name = self.data["path"] + " - " + self.data["name"]
             self.unique_id = self.data["path"]
+            
+            if self.data["unit"]:
+                self.native_unit_of_measurement = self.data["unit"]
+
+            if types == 6 or types == 8:
+                try:
+                    self.native_value = float(self.data["value"])
+                except TypeError:
+                    self.native_value = None
+                except ValueError:
+                    self.native_value = None
+            else:
+                self.native_value = self.data["value"]
 
             if self.data["type"] == 6:
                 self.device_class = SensorDeviceClass.TEMPERATURE
@@ -73,31 +86,17 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
+            if types == 6 or types == 8:
+                try:
+                    self.native_value = float(self.data["value"])
+                except TypeError:
+                    self.native_value = None
+                except ValueError:
+                    self.native_value = None
+            else:
+                self.native_value = self.data["value"]
+
             self.coordinator.logger.info(self.name)
 
             self.async_write_ha_state()
 
-    @property
-    def state(self) -> Any:
-        if "value" in self.data and "type" in self.data:
-            value = self.data["value"]
-            types = self.data["type"]
-
-            if types == 6 or types == 8:
-                try:
-                    return float(value)
-                except TypeError:
-                    return None
-                except ValueError:
-                    return None
-            else:
-                return value
-        else:
-            return None
-
-    @property
-    def unit_of_measurement(self) -> str | None:
-        if self.data["unit"]:
-            return self.data["unit"]
-        else:
-            return None

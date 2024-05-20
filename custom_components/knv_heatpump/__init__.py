@@ -18,7 +18,6 @@ from __future__ import annotations
 from datetime import timedelta
 
 import async_timeout
-import asyncio
 
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.components.light import LightEntity
@@ -41,8 +40,6 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry):
     hass.data[knv.DOMAIN] = {
         "coord": coordinator
     }
-
-    await asyncio.sleep(1)
 
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setups(
