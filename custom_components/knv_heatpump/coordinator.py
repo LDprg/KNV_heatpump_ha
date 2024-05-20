@@ -27,7 +27,6 @@ class KNVCoordinator(DataUpdateCoordinator):
         self.hass = hass
         self.config = config
         self.socket = knvheatpump.Socket()
-        self.data = {}
         self.paths = []
 
         self.createSocket()
@@ -35,6 +34,7 @@ class KNVCoordinator(DataUpdateCoordinator):
     def createSocket(self):
         async def callback(data):
             try:
+                knv.LOGGER.warn("Data received!")
                 self.async_set_updated_data(data)
             except Exception as e:
                 print(e)

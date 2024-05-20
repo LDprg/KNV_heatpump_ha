@@ -8,5 +8,5 @@
     "issue_tracker": "https://github.com/LDprg/KNV_heatpump_ha/issues",
     "iot_class": "local_push",
     "loggers": ["custom_components.knv_heatpump"],
-    "version": "0.1.0"
+    "version": "0.1.2"
   }
