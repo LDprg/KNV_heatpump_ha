@@ -32,7 +32,7 @@ class KNVCoordinator(DataUpdateCoordinator):
 
         self.createSocket()
 
-    def createSocket():
+    def createSocket(self):
         async def callbacks(data):
             try:
                 self.async_set_updated_data(data)
