@@ -49,6 +49,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
 
+        self.options = []
         for data in self.get_data()["listentries"]:
             self.options.append(data["text"])
 
@@ -61,8 +62,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self.current_option = self.knv_get_option(
-            self.get_data()["value"])
+        self.current_option = self.knv_get_option(self.get_data()["value"])
         self.async_write_ha_state()
 
     async def async_select_option(self, option: str) -> None:
