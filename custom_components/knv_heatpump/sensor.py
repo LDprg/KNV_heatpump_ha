@@ -27,6 +27,8 @@ async def async_setup_entry(
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
     coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
+    
+    LOGGER.warn("Init Sensors")
 
     @callback
     def _async_measurement_listener() -> None:
