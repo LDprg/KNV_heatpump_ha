@@ -26,8 +26,8 @@ async def async_setup_entry(
         """Listen for new measurements and add sensors if they did not exist."""
         
         data = coordinator.data        
-        if not data["path"] in coordinator.paths:
-            if knv.getType(data) == knv.Type.SELECT:
+        if knv.getType(data) == knv.Type.SELECT:
+            if not data["path"] in coordinator.paths:
                 coordinator.paths.append(data["path"])
                 
                 async_add_entities(
