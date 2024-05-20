@@ -64,7 +64,7 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
         if self.data["type"] == 6:
             self.device_class = NumberDeviceClass.TEMPERATURE
         elif self.data["type"] == 8:
-            self.device_class = NumberDeviceClass.ENERGY_STORAGE
+            self.device_class = NumberDeviceClass.POWER
         elif self.data["type"] == 4:
             self.device_class = NumberDeviceClass.DURATION
 
