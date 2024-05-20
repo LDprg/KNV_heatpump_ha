@@ -18,6 +18,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 import async_timeout
+import asyncio
 
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.components.light import LightEntity
