@@ -56,7 +56,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             if self.data["unit"]:
                 self.native_unit_of_measurement = self.data["unit"]
 
-            if types == 6 or types == 8:
+            if self.data["type"] == 6 or self.data["type"] == 8:
                 try:
                     self.native_value = float(self.data["value"])
                 except TypeError:
@@ -86,7 +86,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         if self.coordinator.data["path"] == self.data["path"]:
             self.data["value"] = self.coordinator.data["value"]
 
-            if types == 6 or types == 8:
+            if self.data["type"] == 6 or self.data["type"] == 8:
                 try:
                     self.native_value = float(self.data["value"])
                 except TypeError:
