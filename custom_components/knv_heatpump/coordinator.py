@@ -38,20 +38,3 @@ class KNVCoordinator(DataUpdateCoordinator):
         asyncio.run_coroutine_threadsafe(self.socket.create(
             config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks), hass.loop)
 
-    @callback
-    def async_set_updated_data(self, data) -> None:
-        """Manually update data, notify listeners and reset refresh interval."""
-        self._async_unsub_refresh()
-        self._debounced_refresh.async_cancel()
-
-        self.data = data
-        self.last_update_success = True
-        self.logger.debug(
-            "Manually updated %s data",
-            self.name,
-        )
-
-        if self._listeners:
-            self._schedule_refresh()
-
-        self.async_update_listeners()

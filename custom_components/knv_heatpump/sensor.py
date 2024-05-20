@@ -28,18 +28,18 @@ async def async_setup_entry(
     """Setup sensors from a config entry created in the integrations UI."""
     coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
+    @callback
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
-        data = coordinator.data
-        
         LOGGER.warn("listerner called")
         
+        data = coordinator.data        
         if not data["path"] in coordinator.paths:
             if knv.getType(data) == knv.Type.SENSOR:
                 coordinator.paths.append(data["path"])
                 
                 async_add_entities(
-                    KnvSensor(coordinator, len(coordinator.paths), data)
+                    [KnvSensor(coordinator, len(coordinator.paths), data)]
                 )
 
     coordinator.async_add_listener(_async_measurement_listener)
