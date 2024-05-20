@@ -77,7 +77,7 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
             self.data["value"] = data["value"]
             self.native_value = self.data["value"]
 
-            self.coordinator.logger.info(self.name)
+            self.coordinator.logger.debug(self.name)
 
             self.async_write_ha_state()
 

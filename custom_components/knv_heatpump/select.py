@@ -78,7 +78,7 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
 
             self.current_option = self.knv_get_option(self.data["value"])
 
-            self.coordinator.logger.info(self.name)
+            self.coordinator.logger.debug(self.name)
 
             self.async_write_ha_state()
 
