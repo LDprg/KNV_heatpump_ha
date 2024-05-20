@@ -23,22 +23,24 @@ from . import const as knv
 async def async_setup_entry(
     hass: HomeAssistant,
     _config_entry: ConfigEntry,
-    async_add_entities,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
     coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
-    sensor = []
+    def _async_measurement_listener() -> None:
+        """Listen for new measurements and add sensors if they did not exist."""
+        data = self.coordinator.data
+        
+        if not data["path"] in self.coordinator.paths:
+            if knv.getType(data) == knv.Type.SENSOR:
+                self.coordinator.paths.append(data["path"])
+                
+                async_add_entities(
+                    KnvSensor(coordinator, len(self.coordinator.paths), data)
+                )
 
-    for data in coordinator.data:
-        if knv.getType(data) == knv.Type.SENSOR:
-            sensor.append(data)
-
-    async_add_entities(
-        (KnvSensor(coordinator, idx, data)
-         for idx, data in enumerate(sensor))
-    )
-
+    coordinator.async_add_listener(_async_measurement_listener)
 
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""

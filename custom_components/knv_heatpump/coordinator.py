@@ -26,6 +26,8 @@ class KNVCoordinator(DataUpdateCoordinator):
         )
         self.config = config
         self.socket = knvheatpump.Socket()
+        self.data = None
+        self.paths = []
 
         async def callbacks(data):
             try:
@@ -53,4 +55,4 @@ class KNVCoordinator(DataUpdateCoordinator):
             self._schedule_refresh()
 
         self.async_update_listeners()
-        
+
