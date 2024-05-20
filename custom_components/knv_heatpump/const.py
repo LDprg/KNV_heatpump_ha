@@ -17,7 +17,7 @@ class Type(Enum):
 
 
 def getType(data):
-    LOGGER.warn("%s\t%s", type(data), data)
+    LOGGER.info("%s\t%s", type(data), data)
 
     if 'writeable' in data.keys() and data["writeable"] is True:
         if data["type"] == 4 or data["type"] == 6 or data["type"] == 8:

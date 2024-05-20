@@ -53,12 +53,4 @@ class KNVCoordinator(DataUpdateCoordinator):
             self._schedule_refresh()
 
         self.async_update_listeners()
-
-    async def _async_update_data(self):
-        data: Any = await knvheatpump.get_data(self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD])
-
-        array = []
-        for val in data:
-            array.append(data[val])
-
-        return array
+        
