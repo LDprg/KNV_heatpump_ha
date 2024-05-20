@@ -57,7 +57,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
 
-        if self.data["unit"]:
+        if self.get_data()["unit"]:
             self._attr_native_unit_of_measurement = self.get_data()["unit"]
 
         if self.get_data()["type"] == 6 or self.get_data()["type"] == 8:
