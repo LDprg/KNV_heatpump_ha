@@ -33,11 +33,11 @@ class KNVCoordinator(DataUpdateCoordinator):
         self.createSocket()
 
     def createSocket(self):
-        async def callbacks(data):
+        async def callback(data):
             try:
                 self.async_set_updated_data(data)
             except Exception as e:
                 print(e)
 
         asyncio.run_coroutine_threadsafe(self.socket.create(
-            self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD], callbacks), self.hass.loop)
+            self.config[CONF_IP_ADDRESS], self.config[CONF_USERNAME], self.config[CONF_PASSWORD], callback), self.hass.loop)
