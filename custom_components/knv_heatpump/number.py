@@ -9,10 +9,8 @@ from homeassistant.components.number import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-)
-
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .coordinator import KNVCoordinator
 
@@ -22,20 +20,24 @@ from . import const as knv
 async def async_setup_entry(
     hass: HomeAssistant,
     _config_entry: ConfigEntry,
-    async_add_entities,
+    async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Setup sensors from a config entry created in the integrations UI."""
     coordinator: KNVCoordinator = hass.data[knv.DOMAIN]["coord"]
 
-    number = []
+    def _async_measurement_listener() -> None:
+        """Listen for new measurements and add sensors if they did not exist."""
+        
+        data = coordinator.data        
+        if not data["path"] in coordinator.paths:
+            if knv.getType(data) == knv.Type.NUMBER:
+                coordinator.paths.append(data["path"])
+                
+                async_add_entities(
+                    [KnvNumber(coordinator, len(coordinator.paths), data)]
+                )
 
-    for data in coordinator.data:
-        if knv.getType(data) == knv.Type.NUMBER:
-            number.append(data)
-
-    async_add_entities(
-        KnvNumber(coordinator, idx, data) for idx, data in enumerate(number)
-    )
+    coordinator.async_add_listener(_async_measurement_listener)
 
 
 class KnvNumber(CoordinatorEntity, NumberEntity):
