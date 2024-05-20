@@ -34,7 +34,6 @@ class KNVCoordinator(DataUpdateCoordinator):
     def createSocket(self):
         async def callback(data):
             try:
-                knv.LOGGER.warn("Data received: %s", data)
                 self.async_set_updated_data(data)
             except Exception as e:
                 print(e)
