@@ -41,32 +41,31 @@ async def async_setup_entry(
 class KnvNumber(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data=None):
+    def __init__(self, coordinator, idx, data):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx: int = idx
         self.data: Any = data
 
-        if self.data is not None:
-            self.name = self.data["path"] + " - " + self.data["name"]
-            self.unique_id = self.data["path"]
+        self.name = self.data["path"] + " - " + self.data["name"]
+        self.unique_id = self.data["path"]
 
-            if "value" in self.data:
-                self.native_value = self.data["value"]
+        if "value" in self.data:
+            self.native_value = self.data["value"]
 
-            self.native_max_value = float(self.data["max"])
-            self.native_min_value = float(self.data["min"])
-            
-            self.native_step = max(1.0, float(self.data["step"]))
-            
-            self.native_unit_of_measurement = self.data["unit"]
+        self.native_max_value = float(self.data["max"])
+        self.native_min_value = float(self.data["min"])
+        
+        self.native_step = max(1.0, float(self.data["step"]))
+        
+        self.native_unit_of_measurement = self.data["unit"]
 
-            if self.data["type"] == 6:
-                self.device_class = NumberDeviceClass.TEMPERATURE
-            elif self.data["type"] == 8:
-                self.device_class = NumberDeviceClass.ENERGY_STORAGE
-            elif self.data["type"] == 4:
-                self.device_class = NumberDeviceClass.DURATION
+        if self.data["type"] == 6:
+            self.device_class = NumberDeviceClass.TEMPERATURE
+        elif self.data["type"] == 8:
+            self.device_class = NumberDeviceClass.ENERGY_STORAGE
+        elif self.data["type"] == 4:
+            self.device_class = NumberDeviceClass.DURATION
 
     @callback
     def _handle_coordinator_update(self) -> None:

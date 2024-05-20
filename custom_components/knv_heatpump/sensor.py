@@ -43,41 +43,40 @@ async def async_setup_entry(
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data=None):
+    def __init__(self, coordinator, idx, data):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx: int = idx
         self.data: Any = data
 
-        if self.data is not None:
-            self.name = self.data["path"] + " - " + self.data["name"]
-            self.unique_id = self.data["path"]
-            
-            if self.data["unit"]:
-                self.native_unit_of_measurement = self.data["unit"]
+        self.name = self.data["path"] + " - " + self.data["name"]
+        self.unique_id = self.data["path"]
+        
+        if self.data["unit"]:
+            self.native_unit_of_measurement = self.data["unit"]
 
-            if self.data["type"] == 6 or self.data["type"] == 8:
-                try:
-                    self.native_value = float(self.data["value"])
-                except TypeError:
-                    self.native_value = None
-                except ValueError:
-                    self.native_value = None
-            else:
-                self.native_value = self.data["value"]
+        if self.data["type"] == 6 or self.data["type"] == 8:
+            try:
+                self.native_value = float(self.data["value"])
+            except TypeError:
+                self.native_value = None
+            except ValueError:
+                self.native_value = None
+        else:
+            self.native_value = self.data["value"]
 
-            if self.data["type"] == 6:
-                self.device_class = SensorDeviceClass.TEMPERATURE
-                self.state_class = SensorStateClass.MEASUREMENT
-            elif self.data["type"] == 8:
-                self.device_class = SensorDeviceClass.ENERGY_STORAGE
-                self.state_class = SensorStateClass.MEASUREMENT
-            elif self.data["type"] == 4:
-                self.device_class = SensorDeviceClass.DURATION
-                self.state_class = SensorStateClass.MEASUREMENT
-            else:
-                self.device_class = None
-                self.state_class = None
+        if self.data["type"] == 6:
+            self.device_class = SensorDeviceClass.TEMPERATURE
+            self.state_class = SensorStateClass.MEASUREMENT
+        elif self.data["type"] == 8:
+            self.device_class = SensorDeviceClass.ENERGY_STORAGE
+            self.state_class = SensorStateClass.MEASUREMENT
+        elif self.data["type"] == 4:
+            self.device_class = SensorDeviceClass.DURATION
+            self.state_class = SensorStateClass.MEASUREMENT
+        else:
+            self.device_class = None
+            self.state_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:

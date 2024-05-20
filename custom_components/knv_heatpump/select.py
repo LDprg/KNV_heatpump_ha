@@ -38,23 +38,22 @@ async def async_setup_entry(
 class KnvSelect(CoordinatorEntity, SelectEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data=None):
+    def __init__(self, coordinator, idx, data):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator, context=idx)
         self.idx: int = idx
         self.data: Any = data
 
-        if self.data is not None:
-            self.name = self.data["path"] + " - " + self.data["name"]
-            self.unique_id = self.data["path"]
+        self.name = self.data["path"] + " - " + self.data["name"]
+        self.unique_id = self.data["path"]
 
-            self.options = []
-            for data in self.data["listentries"]:
-                self.options.append(data["text"])
+        self.options = []
+        for data in self.data["listentries"]:
+            self.options.append(data["text"])
 
-            if "value" in self.data:
-                self.current_option = self.knv_get_option(
-                    self.data["value"])
+        if "value" in self.data:
+            self.current_option = self.knv_get_option(
+                self.data["value"])
 
     def knv_get_option(self, value):
         """Translates value to text"""
