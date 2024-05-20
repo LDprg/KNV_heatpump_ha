@@ -30,16 +30,16 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
-        data = self.coordinator.data
+        data = coordinator.data
         
         LOGGER.warn("listerner called")
         
-        if not data["path"] in self.coordinator.paths:
+        if not data["path"] in coordinator.paths:
             if knv.getType(data) == knv.Type.SENSOR:
-                self.coordinator.paths.append(data["path"])
+                coordinator.paths.append(data["path"])
                 
                 async_add_entities(
-                    KnvSensor(coordinator, len(self.coordinator.paths), data)
+                    KnvSensor(coordinator, len(coordinator.paths), data)
                 )
 
     coordinator.async_add_listener(_async_measurement_listener)
