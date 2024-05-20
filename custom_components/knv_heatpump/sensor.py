@@ -29,15 +29,14 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
+        for data in self.coordinator.data:
+            if knv.getType(data) == knv.Type.SENSOR:
+                if not data["path"] in coordinator.paths:
+                    coordinator.paths.append(data["path"])
 
-        data = coordinator.data
-        if knv.getType(data) == knv.Type.SENSOR:
-            if not data["path"] in coordinator.paths:
-                coordinator.paths.append(data["path"])
-
-                async_add_entities(
-                    [KnvSensor(coordinator, data)]
-                )
+                    async_add_entities(
+                        [KnvSensor(coordinator, data["path"])]
+                    )
 
     coordinator.async_add_listener(_async_measurement_listener)
 
@@ -45,58 +44,53 @@ async def async_setup_entry(
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, data):
+    def __init__(self, coordinator, path):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
-        self.data: Any = data
+        self.path = path
 
-        self.name = self.data["path"] + " - " + self.data["name"]
-        self.unique_id = self.data["path"]
+        self._attr_name = self.path + " - " + self.get_data()["name"]
+        self._attr_unique_id = self.path
 
         if self.data["unit"]:
-            self.native_unit_of_measurement = self.data["unit"]
+            self._attr_native_unit_of_measurement = self.get_data()["unit"]
 
-        if self.data["type"] == 6 or self.data["type"] == 8:
+        if self.get_data()["type"] == 6 or self.get_data()["type"] == 8:
             try:
-                self.native_value = float(self.data["value"])
+                self._attr_native_value = float(self.get_data()["value"])
             except TypeError:
-                self.native_value = None
+                self._attr_native_value = None
             except ValueError:
-                self.native_value = None
+                self._attr_native_value = None
         else:
-            self.native_value = self.data["value"]
+            self._attr_native_value = self.get_data()["value"]
 
-        if self.data["type"] == 6:
-            self.device_class = SensorDeviceClass.TEMPERATURE
-            self.state_class = SensorStateClass.MEASUREMENT
-        elif self.data["type"] == 8:
-            self.device_class = SensorDeviceClass.POWER
-            self.state_class = SensorStateClass.MEASUREMENT
-        elif self.data["type"] == 4:
-            self.device_class = SensorDeviceClass.DURATION
-            self.state_class = SensorStateClass.MEASUREMENT
+        if self.get_data()["type"] == 6:
+            self._attr_device_class = SensorDeviceClass.TEMPERATURE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+        elif self.get_data()["type"] == 8:
+            self._attr_device_class = SensorDeviceClass.POWER
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+        elif self.get_data()["type"] == 4:
+            self._attr_device_class = SensorDeviceClass.DURATION
+            self._attr_state_class = SensorStateClass.MEASUREMENT
         else:
-            self.device_class = None
-            self.state_class = None
+            self._attr_device_class = None
+            self._attr_state_class = None
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        data = self.coordinator.data
+        if self.get_data()["type"] == 6 or self.get_data()["type"] == 8:
+            try:
+                self._attr_native_value = float(self.get_data()["value"])
+            except TypeError:
+                self._attr_native_value = None
+            except ValueError:
+                self._attr_native_value = None
+        else:
+            self._attr_native_value = self.get_data()["value"]
+        self.async_write_ha_state()
 
-        if data["path"] == self.data["path"]:
-            self.data["value"] = data["value"]
-
-            if self.data["type"] == 6 or self.data["type"] == 8:
-                try:
-                    self.native_value = float(self.data["value"])
-                except TypeError:
-                    self.native_value = None
-                except ValueError:
-                    self.native_value = None
-            else:
-                self.native_value = self.data["value"]
-
-            self.coordinator.logger.debug(self.name)
-
-            self.async_write_ha_state()
+    def get_data():
+        return self.coordinator.data[self.path]

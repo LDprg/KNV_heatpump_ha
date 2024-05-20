@@ -27,15 +27,14 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
+        for data in self.coordinator.data:
+            if knv.getType(data) == knv.Type.NUMBER:
+                if not data["path"] in coordinator.paths:
+                    coordinator.paths.append(data["path"])
 
-        data = coordinator.data
-        if knv.getType(data) == knv.Type.NUMBER:
-            if not data["path"] in coordinator.paths:
-                coordinator.paths.append(data["path"])
-
-                async_add_entities(
-                    [KnvNumber(coordinator, data)]
-                )
+                    async_add_entities(
+                        [KnvNumber(coordinator, data["path"])]
+                    )
 
     coordinator.async_add_listener(_async_measurement_listener)
 
@@ -43,46 +42,42 @@ async def async_setup_entry(
 class KnvNumber(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, data):
+    def __init__(self, coordinator, path):
         """Pass coordinator to CoordinatorEntity."""
         super().__init__(coordinator)
-        self.data: Any = data
+        self.path = path
 
-        self.name = self.data["path"] + " - " + self.data["name"]
-        self.unique_id = self.data["path"]
+        self._attr_name = self.path + " - " + self.get_data()["name"]
+        self._attr_unique_id = self.path
 
-        if "value" in self.data:
-            self.native_value = self.data["value"]
+        if "value" in self.get_data():
+            self._attr_native_value = self.get_data()["value"]
 
-        self.native_max_value = float(self.data["max"])
-        self.native_min_value = float(self.data["min"])
+        self._attr_native_max_value = float(self.get_data()["max"])
+        self._attr_native_min_value = float(self.get_data()["min"])
 
-        self.native_step = max(1.0, float(self.data["step"]))
+        self._attr_native_step = max(1.0, float(self.get_data()["step"]))
 
-        self.native_unit_of_measurement = self.data["unit"]
+        self._attr_native_unit_of_measurement = self.get_data()["unit"]
 
-        if self.data["type"] == 6:
-            self.device_class = NumberDeviceClass.TEMPERATURE
-        elif self.data["type"] == 8:
-            self.device_class = NumberDeviceClass.POWER
-        elif self.data["type"] == 4:
-            self.device_class = NumberDeviceClass.DURATION
+        if self.get_data()["type"] == 6:
+            self._attr_device_class = NumberDeviceClass.TEMPERATURE
+        elif self.get_data()["type"] == 8:
+            self._attr_device_class = NumberDeviceClass.POWER
+        elif self.get_data()["type"] == 4:
+            self._attr_device_class = NumberDeviceClass.DURATION
 
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        data = self.coordinator.data
-
-        if data["path"] == self.data["path"]:
-            self.data["value"] = data["value"]
-            self.native_value = self.data["value"]
-
-            self.coordinator.logger.debug(self.name)
-
-            self.async_write_ha_state()
+        self._attr_native_value = self.get_data()["value"]
+        self.async_write_ha_state()
 
     async def async_set_native_value(self, value: float) -> None:
-        if bool(self.data["writeable"]) is True:
-            await self.coordinator.socket.send(self.data["path"], value)
+        if bool(self.get_data()["writeable"]) is True:
+            await self.coordinator.socket.send(self.path, value)
         else:
             raise NotImplementedError()
+
+    def get_data():
+        return self.coordinator.data[self.path]
