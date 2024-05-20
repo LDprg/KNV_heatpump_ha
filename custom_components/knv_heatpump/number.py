@@ -34,7 +34,7 @@ async def async_setup_entry(
                 coordinator.paths.append(data["path"])
                 
                 async_add_entities(
-                    [KnvNumber(coordinator, len(coordinator.paths), data)]
+                    [KnvNumber(coordinator, data)]
                 )
 
     coordinator.async_add_listener(_async_measurement_listener)
@@ -43,10 +43,9 @@ async def async_setup_entry(
 class KnvNumber(CoordinatorEntity, NumberEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data):
+    def __init__(self, coordinator, data):
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(coordinator, context=idx)
-        self.idx: int = idx
+        super().__init__(coordinator)
         self.data: Any = data
 
         self.name = self.data["path"] + " - " + self.data["name"]

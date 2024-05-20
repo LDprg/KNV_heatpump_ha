@@ -31,7 +31,7 @@ async def async_setup_entry(
                 coordinator.paths.append(data["path"])
                 
                 async_add_entities(
-                    [KnvSelect(coordinator, len(coordinator.paths), data)]
+                    [KnvSelect(coordinator, data)]
                 )
 
     coordinator.async_add_listener(_async_measurement_listener)
@@ -40,10 +40,9 @@ async def async_setup_entry(
 class KnvSelect(CoordinatorEntity, SelectEntity):
     """Representation of a Sensor."""
 
-    def __init__(self, coordinator, idx, data):
+    def __init__(self, coordinator, data):
         """Pass coordinator to CoordinatorEntity."""
-        super().__init__(coordinator, context=idx)
-        self.idx: int = idx
+        super().__init__(coordinator)
         self.data: Any = data
 
         self.name = self.data["path"] + " - " + self.data["name"]
@@ -61,8 +60,6 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
         """Translates value to text"""
         for data in self.data["listentries"]:
             if int(value) == int(data["value"]):
-                self.coordinator.logger.warn(
-                    "%s: %s -- %s", self.data["path"], value, data["text"])
                 return data["text"]
 
     def knv_get_value(self, option):
