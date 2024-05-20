@@ -35,7 +35,8 @@ class KnvHeatpumpFlow(config_entries.ConfigFlow, domain=knv.DOMAIN):
             knv.LOGGER.info("Gathering mac address")
 
             try:
-                mac = get_mac_address(ip=info[CONF_IP_ADDRESS].strip(), network_request=True)
+                mac = get_mac_address(
+                    ip=info[CONF_IP_ADDRESS].strip(), network_request=True)
             except ValueError:
                 mac = None
 

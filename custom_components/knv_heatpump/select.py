@@ -24,12 +24,12 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
-        
-        data = coordinator.data        
+
+        data = coordinator.data
         if knv.getType(data) == knv.Type.SELECT:
             if not data["path"] in coordinator.paths:
                 coordinator.paths.append(data["path"])
-                
+
                 async_add_entities(
                     [KnvSelect(coordinator, data)]
                 )
@@ -71,9 +71,10 @@ class KnvSelect(CoordinatorEntity, SelectEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        data = self.coordinator.data
 
-        if self.coordinator.data["path"] == self.data["path"]:
-            self.data["value"] = self.coordinator.data["value"]
+        if data["path"] == self.data["path"]:
+            self.data["value"] = data["value"]
 
             self.current_option = self.knv_get_option(self.data["value"])
 

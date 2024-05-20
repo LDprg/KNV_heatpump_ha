@@ -27,12 +27,12 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
-        
-        data = coordinator.data        
+
+        data = coordinator.data
         if knv.getType(data) == knv.Type.NUMBER:
             if not data["path"] in coordinator.paths:
                 coordinator.paths.append(data["path"])
-                
+
                 async_add_entities(
                     [KnvNumber(coordinator, data)]
                 )
@@ -56,9 +56,9 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
 
         self.native_max_value = float(self.data["max"])
         self.native_min_value = float(self.data["min"])
-        
+
         self.native_step = max(1.0, float(self.data["step"]))
-        
+
         self.native_unit_of_measurement = self.data["unit"]
 
         if self.data["type"] == 6:
@@ -71,9 +71,10 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        data = self.coordinator.data
 
-        if self.coordinator.data["path"] == self.data["path"]:
-            self.data["value"] = self.coordinator.data["value"]
+        if data["path"] == self.data["path"]:
+            self.data["value"] = data["value"]
             self.native_value = self.data["value"]
 
             self.coordinator.logger.info(self.name)

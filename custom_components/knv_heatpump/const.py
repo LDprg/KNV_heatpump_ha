@@ -23,5 +23,5 @@ def getType(data):
 
     if data["type"] == 29:
         return Type.SELECT
-    
+
     return Type.SENSOR

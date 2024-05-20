@@ -29,17 +29,18 @@ async def async_setup_entry(
 
     def _async_measurement_listener() -> None:
         """Listen for new measurements and add sensors if they did not exist."""
-        
-        data = coordinator.data        
+
+        data = coordinator.data
         if knv.getType(data) == knv.Type.SENSOR:
             if not data["path"] in coordinator.paths:
                 coordinator.paths.append(data["path"])
-                
+
                 async_add_entities(
                     [KnvSensor(coordinator, data)]
                 )
 
     coordinator.async_add_listener(_async_measurement_listener)
+
 
 class KnvSensor(CoordinatorEntity, SensorEntity):
     """Representation of a Sensor."""
@@ -51,7 +52,7 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
 
         self.name = self.data["path"] + " - " + self.data["name"]
         self.unique_id = self.data["path"]
-        
+
         if self.data["unit"]:
             self.native_unit_of_measurement = self.data["unit"]
 
@@ -81,9 +82,10 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
+        data = self.coordinator.data
 
-        if self.coordinator.data["path"] == self.data["path"]:
-            self.data["value"] = self.coordinator.data["value"]
+        if data["path"] == self.data["path"]:
+            self.data["value"] = data["value"]
 
             if self.data["type"] == 6 or self.data["type"] == 8:
                 try:
@@ -98,4 +100,3 @@ class KnvSensor(CoordinatorEntity, SensorEntity):
             self.coordinator.logger.info(self.name)
 
             self.async_write_ha_state()
-

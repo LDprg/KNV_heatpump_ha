@@ -37,4 +37,3 @@ class KNVCoordinator(DataUpdateCoordinator):
 
         asyncio.run_coroutine_threadsafe(self.socket.create(
             config[CONF_IP_ADDRESS], config[CONF_USERNAME], config[CONF_PASSWORD], callbacks), hass.loop)
-
