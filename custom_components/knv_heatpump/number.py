@@ -52,6 +52,8 @@ class KnvNumber(CoordinatorEntity, NumberEntity):
         self._attr_name = self.path + " - " + self.get_data()["name"]
         self._attr_unique_id = self.path
 
+        self._attr_mode = "box"
+
         if "value" in self.get_data():
             self._attr_native_value = self.get_data()["value"]
 
